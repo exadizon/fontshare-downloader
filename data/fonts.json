@@ -1,5 +1,5 @@
 {
-  "synced_at": "2026-09-04T01:41:01Z",
+  "synced_at": "2026-09-04T01:45:46Z",
   "count_total": 100,
   "fonts": [
     {
@@ -278,7 +278,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 500.0
+          "range_default": 340.0
         }
       ],
       "styles": [
@@ -578,7 +578,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 540.0
+          "range_default": 340.0
         }
       ],
       "styles": [
@@ -1136,7 +1136,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 580.0
+          "range_default": 740.0
         }
       ],
       "styles": [
@@ -1735,7 +1735,7 @@
       "axes": [],
       "styles": [
         {
-          "default": true,
+          "default": false,
           "id": "56bfc2a4-3bb3-4aac-862e-3055576d881d",
           "file": "//cdn.fontshare.com/wf/4QBZHM3FOPYBI67YBLLWZV6ZYIUQTKEE/RXSUFPNEA6YXGQDMHMP3OODY6UWXRJBM/C6VM2RT4EU2NNT5XZWVYHR7WOIOGM4EU",
           "weight": {
@@ -1783,7 +1783,7 @@
           "is_italic": false
         },
         {
-          "default": false,
+          "default": true,
           "id": "bcade387-7759-4bb3-814c-4c039d5d5469",
           "file": "//cdn.fontshare.com/wf/CASMZPM4VVUC7LKMFQX5SR6SI2NXI6WK/JAJOL32XMCA7KL72O3CN6EMCO3THGWPV/N2P4YTB27O7OQQY6FVFUL232EUHLL7SR",
           "weight": {
@@ -2047,7 +2047,7 @@
           "property": "wght",
           "range_left": 400.0,
           "range_right": 700.0,
-          "range_default": 430.0
+          "range_default": 550.0
         }
       ],
       "styles": [
@@ -2419,7 +2419,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 400.0
+          "range_default": 650.0
         }
       ],
       "styles": [
@@ -2995,7 +2995,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 660.0
+          "range_default": 260.0
         }
       ],
       "styles": [
@@ -3776,7 +3776,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 800.0,
-          "range_default": 500.0
+          "range_default": 450.0
         }
       ],
       "styles": [
@@ -4224,14 +4224,14 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 800.0,
-          "range_default": 800.0
+          "range_default": 650.0
         },
         {
           "name": "wght",
           "property": "wght",
           "range_left": 300.0,
           "range_right": 800.0,
-          "range_default": 500.0
+          "range_default": 450.0
         }
       ],
       "styles": [
@@ -4676,7 +4676,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 800.0,
-          "range_default": 600.0
+          "range_default": 750.0
         }
       ],
       "styles": [
@@ -5546,7 +5546,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 820.0
+          "range_default": 340.0
         }
       ],
       "styles": [
@@ -6126,7 +6126,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 580.0
+          "range_default": 500.0
         }
       ],
       "styles": [
@@ -6731,7 +6731,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 700.0,
-          "range_default": 640.0
+          "range_default": 340.0
         }
       ],
       "styles": [
@@ -7028,7 +7028,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 900.0,
-          "range_default": 830.0
+          "range_default": 340.0
         }
       ],
       "styles": [
@@ -7591,7 +7591,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 900.0,
-          "range_default": 840.0
+          "range_default": 900.0
         }
       ],
       "styles": [
@@ -7868,7 +7868,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 580.0
+          "range_default": 340.0
         }
       ],
       "styles": [
@@ -8214,7 +8214,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 600.0
+          "range_default": 500.0
         }
       ],
       "styles": [
@@ -8542,14 +8542,14 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 650.0
+          "range_default": 250.0
         },
         {
           "name": "wght",
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 400.0
+          "range_default": 650.0
         }
       ],
       "styles": [
@@ -8961,7 +8961,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 650.0
+          "range_default": 450.0
         }
       ],
       "styles": [
@@ -9261,7 +9261,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 550.0
+          "range_default": 400.0
         }
       ],
       "styles": [
@@ -9745,7 +9745,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 900.0,
-          "range_default": 550.0
+          "range_default": 270.0
         }
       ],
       "styles": [
@@ -10303,7 +10303,7 @@
           "property": "wght",
           "range_left": 400.0,
           "range_right": 700.0,
-          "range_default": 700.0
+          "range_default": 580.0
         }
       ],
       "styles": [
@@ -10546,7 +10546,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 180.0
+          "range_default": 420.0
         }
       ],
       "styles": [
@@ -11143,7 +11143,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 460.0
+          "range_default": 620.0
         }
       ],
       "styles": [
@@ -11550,7 +11550,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 340.0
+          "range_default": 260.0
         }
       ],
       "styles": [
@@ -11848,7 +11848,7 @@
           "property": "wght",
           "range_left": 400.0,
           "range_right": 900.0,
-          "range_default": 550.0
+          "range_default": 700.0
         }
       ],
       "styles": [
@@ -12129,7 +12129,7 @@
           "property": "wght",
           "range_left": 400.0,
           "range_right": 700.0,
-          "range_default": 490.0
+          "range_default": 670.0
         }
       ],
       "styles": [
@@ -12532,14 +12532,14 @@
           "property": "wght",
           "range_left": 1.0,
           "range_right": 950.0,
-          "range_default": 380.6
+          "range_default": 475.5
         },
         {
           "name": "Weight",
           "property": "wght",
           "range_left": 1.0,
           "range_right": 925.0,
-          "range_default": 185.8
+          "range_default": 925.0
         }
       ],
       "styles": [
@@ -13284,14 +13284,14 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 660.0
+          "range_default": 340.0
         },
         {
           "name": "wght",
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 540.0
+          "range_default": 460.0
         }
       ],
       "styles": [
@@ -13687,7 +13687,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 250.0
+          "range_default": 700.0
         }
       ],
       "styles": [
@@ -14138,7 +14138,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 500.0
+          "range_default": 340.0
         }
       ],
       "styles": [
@@ -14405,7 +14405,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 550.0
+          "range_default": 500.0
         }
       ],
       "styles": [
@@ -14687,7 +14687,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 800.0,
-          "range_default": 310.0
+          "range_default": 730.0
         }
       ],
       "styles": [
@@ -15228,7 +15228,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 620.0
+          "range_default": 660.0
         }
       ],
       "styles": [
@@ -15430,7 +15430,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 380.0
+          "range_default": 500.0
         }
       ],
       "styles": [
@@ -15686,7 +15686,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 660.0
+          "range_default": 540.0
         }
       ],
       "styles": [
@@ -16453,7 +16453,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 900.0,
-          "range_default": 340.0
+          "range_default": 830.0
         },
         {
           "name": "Optical Size",
@@ -17035,7 +17035,7 @@
           "property": "wght",
           "range_left": 400.0,
           "range_right": 700.0,
-          "range_default": 490.0
+          "range_default": 640.0
         }
       ],
       "styles": [
@@ -17418,7 +17418,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 800.0,
-          "range_default": 260.0
+          "range_default": 560.0
         }
       ],
       "styles": [
@@ -17765,7 +17765,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 380.0
+          "range_default": 700.0
         }
       ],
       "styles": [
@@ -18074,7 +18074,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 800.0,
-          "range_default": 450.0
+          "range_default": 600.0
         }
       ],
       "styles": [
@@ -19238,7 +19238,7 @@
           "property": "wght",
           "range_left": 400.0,
           "range_right": 900.0,
-          "range_default": 600.0
+          "range_default": 450.0
         }
       ],
       "styles": [
@@ -19611,7 +19611,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 300.0
+          "range_default": 450.0
         }
       ],
       "styles": [
@@ -19923,7 +19923,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 650.0
+          "range_default": 250.0
         }
       ],
       "styles": [
@@ -20235,7 +20235,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 1000,
-          "range_default": 440.0
+          "range_default": 280.0
         },
         {
           "name": "Italic",
@@ -20802,7 +20802,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 400.0
+          "range_default": 500.0
         }
       ],
       "styles": [
@@ -21106,7 +21106,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 340.0
+          "range_default": 180.0
         }
       ],
       "styles": [
@@ -21472,7 +21472,7 @@
           "property": "wght",
           "range_left": 400.0,
           "range_right": 700.0,
-          "range_default": 550.0
+          "range_default": 430.0
         }
       ],
       "styles": [
@@ -21700,7 +21700,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 800.0,
-          "range_default": 680.0
+          "range_default": 260.0
         }
       ],
       "styles": [
@@ -22030,7 +22030,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 580.0
+          "range_default": 420.0
         }
       ],
       "styles": [
@@ -22417,7 +22417,7 @@
           "property": "wght",
           "range_left": 400.0,
           "range_right": 900.0,
-          "range_default": 650.0
+          "range_default": 700.0
         }
       ],
       "styles": [
@@ -22693,14 +22693,14 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 900.0,
-          "range_default": 780.0
+          "range_default": 360.0
         },
         {
           "name": "wght",
           "property": "wght",
           "range_left": 300.0,
           "range_right": 900.0,
-          "range_default": 900.0
+          "range_default": 600.0
         }
       ],
       "styles": [
@@ -23146,7 +23146,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 800.0,
-          "range_default": 320.0
+          "range_default": 440.0
         }
       ],
       "styles": [
@@ -23680,7 +23680,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 180.0
+          "range_default": 820.0
         }
       ],
       "styles": [
@@ -24320,7 +24320,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 900.0,
-          "range_default": 270.0
+          "range_default": 900.0
         }
       ],
       "styles": [
@@ -24935,7 +24935,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 820.0
+          "range_default": 580.0
         }
       ],
       "styles": [
@@ -25558,7 +25558,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 500.0
+          "range_default": 700.0
         }
       ],
       "styles": [
@@ -25819,7 +25819,7 @@
           "property": "wght",
           "range_left": 400.0,
           "range_right": 700.0,
-          "range_default": 700.0
+          "range_default": 580.0
         }
       ],
       "styles": [
@@ -26064,7 +26064,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 500.0
+          "range_default": 620.0
         }
       ],
       "styles": [
@@ -26345,7 +26345,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 700.0,
-          "range_default": 400.0
+          "range_default": 580.0
         }
       ],
       "styles": [
@@ -26790,14 +26790,14 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 540.0
+          "range_default": 460.0
         },
         {
           "name": "wght",
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 500.0
+          "range_default": 700.0
         }
       ],
       "styles": [
@@ -27238,7 +27238,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 900.0,
-          "range_default": 480.0
+          "range_default": 720.0
         }
       ],
       "styles": [
@@ -27871,7 +27871,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 650.0
+          "range_default": 350.0
         }
       ],
       "styles": [
@@ -28176,7 +28176,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 700.0
+          "range_default": 620.0
         }
       ],
       "styles": [
@@ -28661,7 +28661,7 @@
           "property": "wght",
           "range_left": 1.0,
           "range_right": 1000,
-          "range_default": 600.4000000000001
+          "range_default": 100.9
         }
       ],
       "styles": [
@@ -29457,14 +29457,14 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 450.0
+          "range_default": 350.0
         },
         {
           "name": "wght",
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 450.0
+          "range_default": 600.0
         }
       ],
       "styles": [
@@ -29872,7 +29872,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 900.0,
-          "range_default": 660.0
+          "range_default": 780.0
         }
       ],
       "styles": [
@@ -30159,7 +30159,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 800.0,
-          "range_default": 310.0
+          "range_default": 170.0
         }
       ],
       "styles": [
@@ -30769,7 +30769,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 580.0
+          "range_default": 380.0
         }
       ],
       "styles": [
@@ -31078,7 +31078,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 540.0
+          "range_default": 500.0
         }
       ],
       "styles": [
@@ -31598,7 +31598,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 900.0,
-          "range_default": 760.0
+          "range_default": 340.0
         }
       ],
       "styles": [
@@ -31947,7 +31947,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 800.0,
-          "range_default": 310.0
+          "range_default": 240.0
         }
       ],
       "styles": [
@@ -32454,7 +32454,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 580.0
+          "range_default": 660.0
         }
       ],
       "styles": [
@@ -33059,7 +33059,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 700.0,
-          "range_default": 700.0
+          "range_default": 550.0
         }
       ],
       "styles": [
@@ -33359,7 +33359,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 460.0
+          "range_default": 620.0
         }
       ],
       "styles": [
@@ -33895,7 +33895,7 @@
           "property": "wght",
           "range_left": 200.0,
           "range_right": 900.0,
-          "range_default": 900.0
+          "range_default": 760.0
         }
       ],
       "styles": [
@@ -34472,7 +34472,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 900.0,
-          "range_default": 780.0
+          "range_default": 540.0
         }
       ],
       "styles": [
@@ -34759,7 +34759,7 @@
           "property": "wght",
           "range_left": 300.0,
           "range_right": 700.0,
-          "range_default": 540.0
+          "range_default": 700.0
         }
       ],
       "styles": [
@@ -35141,7 +35141,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 500.0
+          "range_default": 900.0
         }
       ],
       "styles": [
@@ -35916,7 +35916,7 @@
           "property": "wght",
           "range_left": 100.0,
           "range_right": 900.0,
-          "range_default": 820.0
+          "range_default": 260.0
         }
       ],
       "styles": [

@@ -90,6 +90,14 @@ def main() -> int:
         "fonts": [slim_font(f) for f in fonts],
     }
     (DATA_DIR / "fonts.min.json").write_text(json.dumps(slim), encoding="utf-8")
+    # Mirror the slim bundle into the web app so Vercel deploys (root: web/)
+    # stay self-contained without reaching outside the web directory.
+    web_lib = ROOT / "web" / "lib"
+    if web_lib.exists():
+        (web_lib / "fonts.min.json").write_text(
+            json.dumps(slim), encoding="utf-8"
+        )
+        print(f"Mirrored slim bundle to {web_lib / 'fonts.min.json'}")
     print(f"Synced {len(fonts)} families in {time.time() - started:.1f}s")
     print(f"Wrote {DATA_DIR / 'fonts.json'} and {DATA_DIR / 'fonts.min.json'}")
     return 0

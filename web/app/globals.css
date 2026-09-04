@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f4f1e9;
+  --color-paper-deep: #eae5d6;
+  --color-ink: #16130e;
+  --color-smoke: #6f6a5c;
+  --color-line: #16130e;
+  --color-card: #faf8f2;
+  --font-display: "Clash Display", "Archivo", system-ui, sans-serif;
+  --font-body: "General Sans", system-ui, -apple-system, sans-serif;
+}
+
+html {
+  background: var(--color-paper);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Thin-rule dividers, Fontshare style */
+.rule-t {
+  border-top: 1px solid var(--color-ink);
+}
+.rule-b {
+  border-bottom: 1px solid var(--color-ink);
+}
+
+/* Micro uppercase labels */
+.micro {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* Solid ink button */
+.btn-ink {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-weight: 600;
+  transition: opacity 0.15s ease;
+}
+.btn-ink:hover {
+  opacity: 0.85;
+}
+.btn-ink:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Outline button */
+.btn-line {
+  border: 1px solid var(--color-ink);
+  color: var(--color-ink);
+  font-weight: 600;
+  transition: background 0.15s ease;
+}
+.btn-line:hover {
+  background: rgba(22, 19, 14, 0.06);
+}
+
+/* Single-line preview clipping */
+.preview-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
