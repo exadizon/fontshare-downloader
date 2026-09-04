@@ -5,9 +5,8 @@ import { useMemo, useState } from "react";
 import {
   CATEGORIES,
   categoriesOf,
-  CITIES,
   cssUrl,
-  EXCERPT,
+  downloadUrl,
   hasItalic,
   isVariable,
   PERSONALITIES,
@@ -20,14 +19,7 @@ import {
 import { useQueue } from "../lib/queue";
 import LazyFontCss from "./LazyFontCss";
 
-type ContentMode = "names" | "excerpts" | "cities";
 type QuickFilter = "all" | "top" | "hot" | "variable";
-
-function previewFor(font: CatalogFont, mode: ContentMode, text: string, index: number): string {
-  if (mode === "names") return font.name;
-  if (mode === "cities") return CITIES[index % CITIES.length];
-  return text.trim() || EXCERPT;
-}
 
 function Dropdown({
   label,
@@ -103,13 +95,10 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
   const [italicsOnly, setItalicsOnly] = useState(false);
   const [personalities, setPersonalities] = useState<string[]>([]);
   const [customText, setCustomText] = useState("");
-  const [mode, setMode] = useState<ContentMode>("excerpts");
-  const [sizePx, setSizePx] = useState(120);
-  const [lightCards, setLightCards] = useState(false);
   const [view, setView] = useState<"list" | "grid">("list");
   const [quick, setQuick] = useState<QuickFilter>("all");
   const [sort, setSort] = useState<SortKey>("popular");
-  const { slugs, toggle, selectAll } = useQueue();
+  const { slugs, toggle, selectAll, clear } = useQueue();
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -130,6 +119,9 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
     );
   }, [fonts, query, category, variableOnly, italicsOnly, personalities, quick, sort]);
 
+  const shownSlugs = useMemo(() => filtered.map((f) => f.slug), [filtered]);
+  const allShownQueued = shownSlugs.length > 0 && shownSlugs.every((s) => slugs.includes(s));
+
   const resetAll = () => {
     setQuery("");
     setCategory("All");
@@ -143,17 +135,16 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
   const togglePersonality = (tag: string) =>
     setPersonalities((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
 
-
   return (
     <div>
-      {/* Toolbar row 1: search, dropdowns, size slider */}
+      {/* Toolbar row 1: search + dropdown filters */}
       <div className="rule-b flex flex-wrap items-center gap-x-10 gap-y-3 py-3">
         <label className="flex items-center gap-2 flex-1 min-w-44 text-sm">
           <span aria-hidden="true" className="dim">⌕</span>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search"
+            placeholder="Search families to download"
             aria-label="Search fonts"
             className="twin-input w-full"
           />
@@ -182,63 +173,26 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
             />
           ))}
         </Dropdown>
-        <div className="flex items-center gap-4 ml-auto">
-          <span className="text-sm font-semibold tabular-nums">{sizePx}px</span>
-          <input
-            type="range"
-            min={24}
-            max={240}
-            value={sizePx}
-            onChange={(e) => setSizePx(Number(e.target.value))}
-            aria-label="Preview size"
-            className="twin-range w-40 md:w-56"
-          />
-        </div>
       </div>
 
-      {/* Toolbar row 2: your text, content toggle, contrast, reset */}
+      {/* Toolbar row 2: preview text, bulk selection, reset */}
       <div className="rule-b flex flex-wrap items-center gap-x-8 gap-y-3 py-3">
         <label className="flex items-center gap-2 flex-[2] min-w-52 text-sm">
           <span aria-hidden="true" className="dim">✎</span>
           <input
             value={customText}
             onChange={(e) => setCustomText(e.target.value)}
-            placeholder="Your Text"
+            placeholder="Preview text (optional)"
             aria-label="Custom preview text"
             className="twin-input w-full"
           />
         </label>
-        <div className="flex items-center gap-5 text-sm mx-auto" role="group" aria-label="Preview content">
-          {(["cities", "excerpts", "names"] as ContentMode[]).map((m) => (
-            <button
-              key={m}
-              type="button"
-              onClick={() => setMode(m)}
-              aria-pressed={mode === m}
-              className={mode === m ? "font-semibold" : "dim"}
-            >
-              {m === "cities" ? "Cities" : m === "excerpts" ? "Excerpts" : "Names"}
-            </button>
-          ))}
-        </div>
         <button
           type="button"
-          onClick={() => setLightCards((v) => !v)}
-          aria-pressed={lightCards}
-          aria-label="Toggle preview contrast"
-          className="flex items-center gap-2"
+          onClick={() => (allShownQueued ? clear() : selectAll(shownSlugs))}
+          className="text-sm font-semibold hover:underline underline-offset-4"
         >
-          <span
-            aria-hidden="true"
-            className={`w-4 h-4 rounded-full border border-[var(--color-cream)] ${
-              lightCards ? "bg-[var(--color-cream)]" : "bg-transparent"
-            }`}
-            style={
-              lightCards
-                ? undefined
-                : { background: "linear-gradient(90deg, var(--color-cream) 50%, transparent 50%)" }
-            }
-          />
+          {allShownQueued ? `Unqueue ${filtered.length} shown` : `Queue all ${filtered.length} shown`}
         </button>
         <button type="button" onClick={resetAll} className="text-sm dim hover:text-[var(--color-cream)]">
           Reset All
@@ -306,82 +260,82 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
       {filtered.length === 0 ? (
         <p className="py-16 text-center text-lg dim">No families match. Try Reset All.</p>
       ) : view === "list" ? (
-        <div className="flex flex-col">
-          {filtered.map((font, i) => (
-            <FontRow
+        <ul className="flex flex-col">
+          {filtered.map((font) => (
+            <BulkRow
               key={font.slug}
               font={font}
-              index={i}
-              preview={previewFor(font, mode, customText, i)}
-              sizePx={sizePx}
-              light={lightCards}
+              preview={customText.trim() || font.name}
               selected={slugs.includes(font.slug)}
               onToggle={() => toggle(font.slug)}
             />
           ))}
-        </div>
+        </ul>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {filtered.map((font, i) => (
-            <GridCard
+          {filtered.map((font) => (
+            <BulkCard
               key={font.slug}
               font={font}
-              preview={previewFor(font, mode, customText, i)}
-              light={lightCards}
+              preview={customText.trim() || font.name}
               selected={slugs.includes(font.slug)}
               onToggle={() => toggle(font.slug)}
             />
           ))}
         </div>
       )}
-
-      {filtered.length > 0 && (
-        <div className="pt-6 flex justify-end">
-          <button
-            type="button"
-            onClick={() => selectAll(filtered.map((f) => f.slug))}
-            className="text-sm underline underline-offset-4 dim hover:text-[var(--color-cream)]"
-          >
-            Queue all {filtered.length} shown
-          </button>
-        </div>
-      )}
     </div>
   );
 }
 
-function MetaHead({ font, light }: { font: CatalogFont; light: boolean }) {
+function QueueBox({ selected, onToggle, label }: { selected: boolean; onToggle: () => void; label: string }) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={selected}
+      aria-label={label}
+      onClick={onToggle}
+      className={`shrink-0 w-6 h-6 border border-[var(--color-cream)] flex items-center justify-center text-sm leading-none ${
+        selected ? "bg-[var(--color-cream)] text-[var(--color-coal)]" : ""
+      }`}
+    >
+      {selected ? "✓" : ""}
+    </button>
+  );
+}
+
+function MetaLine({ font }: { font: CatalogFont }) {
   const styles = font.styles.filter((s) => !s.is_italic).length || font.styles.length;
   return (
-    <div className="flex items-start justify-between gap-3 text-[13px]">
-      <Link
-        href={`/${font.slug}`}
-        className={`font-medium hover:underline underline-offset-4 ${light ? "" : ""}`}
-      >
-        {font.name} <span aria-hidden="true">↗</span>
-      </Link>
-      <span className={`hidden sm:inline ${light ? "opacity-70" : "dim"}`}>
-        {styles} styles{isVariable(font) ? " · Variable" : ""}
-      </span>
-      <span className={light ? "opacity-70" : "dim"}>{font.license === "sil_ofl" ? "Open Source" : "Closed Source"}</span>
-    </div>
+    <span className="text-[13px] dim">
+      {font.category} · {styles} style{styles === 1 ? "" : "s"}
+      {isVariable(font) ? " · Variable" : ""} · {font.license === "sil_ofl" ? "Open Source" : "Closed Source"}
+    </span>
   );
 }
 
-function FontRow({
+function DownloadLink({ slug, name, compact }: { slug: string; name: string; compact?: boolean }) {
+  return (
+    <a
+      href={downloadUrl(slug)}
+      download={`${slug}.zip`}
+      onClick={(e) => e.stopPropagation()}
+      className={compact ? "btn-ink px-4 py-1.5 text-[13px]" : "btn-ink px-5 py-2 text-sm"}
+    >
+      {compact ? ".zip" : `Download ${name}`}
+    </a>
+  );
+}
+
+function BulkRow({
   font,
-  index,
   preview,
-  sizePx,
-  light,
   selected,
   onToggle,
 }: {
   font: CatalogFont;
-  index: number;
   preview: string;
-  sizePx: number;
-  light: boolean;
   selected: boolean;
   onToggle: () => void;
 }) {
@@ -389,47 +343,49 @@ function FontRow({
   const mid = weights[Math.floor(weights.length / 2)] ?? 400;
   return (
     <LazyFontCss href={cssUrl(font)}>
-      <article className={`box p-5 md:p-7 mb-5 ${light ? "bg-[var(--color-cream)] text-[var(--color-coal)]" : ""}`}>
-        <MetaHead font={font} light={light} />
-        <Link href={`/${font.slug}`} aria-label={`Open ${font.name} details`} className="block py-6 md:py-10">
+      <li
+        className={`box mb-3 px-4 py-3 flex items-center gap-4 ${
+          selected ? "shadow-[inset_0_0_0_1.5px_var(--color-cream)]" : ""
+        }`}
+      >
+        <QueueBox selected={selected} onToggle={onToggle} label={selected ? `Remove ${font.name} from queue` : `Add ${font.name} to queue`} />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline gap-x-3">
+            <Link
+              href={`/${font.slug}`}
+              className="font-display font-bold text-lg leading-tight hover:underline underline-offset-4 truncate"
+            >
+              {font.name}
+            </Link>
+            <MetaLine font={font} />
+          </div>
           <p
-            className="preview-line font-medium leading-[1.05]"
-            style={{ fontFamily: `'${font.name}', sans-serif`, fontWeight: mid, fontSize: `min(${sizePx}px, 12vw)` }}
+            className="preview-line text-[22px] leading-snug mt-0.5 opacity-90"
+            style={{ fontFamily: `'${font.name}', sans-serif`, fontWeight: mid }}
+            aria-hidden="true"
           >
             {preview}
           </p>
-        </Link>
-        <div className="flex items-center justify-between gap-3 text-[13px]">
-          <span className={light ? "opacity-70" : "dim"}>
-            Designed by {font.designers.join(", ") || "Unknown"} {index === 0 ? "" : ""}
-          </span>
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-pressed={selected}
-            aria-label={selected ? `Remove ${font.name} from queue` : `Add ${font.name} to queue`}
-            className={`w-8 h-8 border text-lg leading-none shrink-0 ${
-              light ? "border-[var(--color-coal)]" : "border-[var(--color-cream)]"
-            } ${selected ? (light ? "bg-[var(--color-coal)] text-[var(--color-cream)]" : "bg-[var(--color-cream)] text-[var(--color-coal)]") : ""}`}
-          >
-            {selected ? "✓" : "+"}
-          </button>
+          <p className="text-xs dim mt-0.5 truncate">
+            Designed by {font.designers.join(", ") || "Unknown"}
+          </p>
         </div>
-      </article>
+        <div className="shrink-0 hidden sm:block">
+          <DownloadLink slug={font.slug} name={font.name} compact />
+        </div>
+      </li>
     </LazyFontCss>
   );
 }
 
-function GridCard({
+function BulkCard({
   font,
   preview,
-  light,
   selected,
   onToggle,
 }: {
   font: CatalogFont;
   preview: string;
-  light: boolean;
   selected: boolean;
   onToggle: () => void;
 }) {
@@ -437,31 +393,37 @@ function GridCard({
   const mid = weights[Math.floor(weights.length / 2)] ?? 400;
   return (
     <LazyFontCss href={cssUrl(font)}>
-      <article className={`box p-5 flex flex-col gap-4 ${light ? "bg-[var(--color-cream)] text-[var(--color-coal)]" : ""}`}>
-        <MetaHead font={font} light={light} />
-        <Link href={`/${font.slug}`} aria-label={`Open ${font.name} details`} className="block">
-          <p
-            className="preview-line font-medium leading-tight text-5xl"
-            style={{ fontFamily: `'${font.name}', sans-serif`, fontWeight: mid }}
-          >
-            {preview}
-          </p>
-        </Link>
-        <div className="flex items-center justify-between gap-3 text-[13px]">
-          <span className={`truncate ${light ? "opacity-70" : "dim"}`}>
-            {font.designers.join(", ") || "Unknown"}
+      <article
+        className={`box p-5 flex flex-col gap-3 ${
+          selected ? "shadow-[inset_0_0_0_1.5px_var(--color-cream)]" : ""
+        }`}
+      >
+        <div className="flex items-start gap-3">
+          <QueueBox selected={selected} onToggle={onToggle} label={selected ? `Remove ${font.name} from queue` : `Add ${font.name} to queue`} />
+          <div className="min-w-0">
+            <Link
+              href={`/${font.slug}`}
+              className="font-display font-bold text-lg leading-tight hover:underline underline-offset-4"
+            >
+              {font.name}
+            </Link>
+            <div className="mt-0.5">
+              <MetaLine font={font} />
+            </div>
+          </div>
+        </div>
+        <p
+          className="preview-line text-[26px] leading-snug opacity-90"
+          style={{ fontFamily: `'${font.name}', sans-serif`, fontWeight: mid }}
+          aria-hidden="true"
+        >
+          {preview}
+        </p>
+        <div className="flex items-center justify-between gap-2 mt-1">
+          <span className="text-xs dim truncate">
+            {font.designers.join(", ") || "Unknown designer"}
           </span>
-          <button
-            type="button"
-            onClick={onToggle}
-            aria-pressed={selected}
-            aria-label={selected ? `Remove ${font.name} from queue` : `Add ${font.name} to queue`}
-            className={`shrink-0 px-3 py-1 border text-sm ${
-              light ? "border-[var(--color-coal)]" : "border-[var(--color-cream)]"
-            } ${selected ? (light ? "bg-[var(--color-coal)] text-[var(--color-cream)]" : "bg-[var(--color-cream)] text-[var(--color-coal)]") : ""}`}
-          >
-            {selected ? "Queued ✓" : "Queue +"}
-          </button>
+          <DownloadLink slug={font.slug} name={font.name} compact />
         </div>
       </article>
     </LazyFontCss>
