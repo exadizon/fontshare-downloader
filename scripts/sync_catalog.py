@@ -64,6 +64,11 @@ def slim_font(font: dict) -> dict:
         "tags": tags,
         "styles": styles,
         "license": font.get("license_type"),
+        "views": font.get("views") or 0,
+        "views_recent": font.get("views_recent") or 0,
+        "is_new": bool(font.get("is_new")),
+        "is_hot": bool(font.get("is_hot")),
+        "is_top": bool(font.get("is_top")),
     }
 
 

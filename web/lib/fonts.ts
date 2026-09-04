@@ -15,6 +15,11 @@ export interface CatalogFont {
   tags: string[];
   styles: FontStyle[];
   license: string;
+  views: number;
+  views_recent: number;
+  is_new: boolean;
+  is_hot: boolean;
+  is_top: boolean;
 }
 
 interface Catalog {
@@ -94,3 +99,52 @@ export function getFont(slug: string): CatalogFont | undefined {
 export function licenseLabel(license: string): string {
   return license === "sil_ofl" ? "SIL OFL" : "ITF FFL";
 }
+
+export type SortKey = "popular" | "new" | "hot" | "alphabetical";
+
+export const SORTS: { key: SortKey; label: string }[] = [
+  { key: "popular", label: "Popular" },
+  { key: "new", label: "New" },
+  { key: "hot", label: "Hot" },
+  { key: "alphabetical", label: "Alphabetical" },
+];
+
+const sorters: Record<SortKey, (a: CatalogFont, b: CatalogFont) => number> = {
+  popular: (a, b) => b.views_recent - a.views_recent || b.views - a.views,
+  new: (a, b) => Number(b.is_new) - Number(a.is_new) || b.views_recent - a.views_recent,
+  hot: (a, b) => Number(b.is_hot) - Number(a.is_hot) || b.views_recent - a.views_recent,
+  alphabetical: (a, b) => a.name.localeCompare(b.name),
+};
+
+export function sortFonts(fonts: CatalogFont[], sort: SortKey): CatalogFont[] {
+  return [...fonts].sort(sorters[sort]);
+}
+
+/** Top tags across the catalog, used as the Personality filter. */
+export const PERSONALITIES: string[] = (() => {
+  const counts = new Map<string, number>();
+  for (const font of FONTS) {
+    for (const tag of font.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 14)
+    .map(([tag]) => tag);
+})();
+
+/** Preview presets mirroring the Names / Excerpts / Cities toggle. */
+export const CITIES = [
+  "New Delhi",
+  "Mumbai",
+  "Berlin",
+  "Tokyo",
+  "Lagos",
+  "Mexico City",
+  "Jakarta",
+  "Cairo",
+  "Paris",
+  "Seoul",
+];
+
+export const EXCERPT =
+  "The quick brown fox jumps over the lazy dog, packing my box with five dozen liquor jugs.";
