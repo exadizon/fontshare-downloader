@@ -36,8 +36,10 @@ Two parts sharing one generated catalog (`data/fonts.json`, 100 families):
 - [x] Canonical CLI with live discovery, extraction, installer
 - [x] Catalog sync script + generated 100-family data with rich metadata
 - [x] Legacy scripts archived, binaries untracked, docs refreshed
-- [ ] Web UI (in progress)
-- [ ] Vercel deploy + demo assets
+- [x] Web UI catalog grid, family detail pages, bulk queue (verified:
+  `npm run lint`, `tsc --noEmit`, `npm run build` 104 static pages,
+  dev-server SSR smoke test on `/` and `/satoshi`)
+- [ ] Vercel deploy + demo assets (`docs/demo/` still empty)
 - [ ] Update detection (download only families new since last sync)
 
 ## Requirements for remaining work

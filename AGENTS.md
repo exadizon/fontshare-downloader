@@ -90,6 +90,6 @@ npm run lint; npm run build           # verify before commit
 
 - [x] Canonical CLI (download + install) with live catalog discovery
 - [x] Synced 100-family catalog with rich metadata
-- [ ] Web UI catalog grid + detail + bulk queue (in progress)
-- [ ] Vercel deploy + demo assets
+- [x] Web UI catalog grid + detail + bulk queue
+- [ ] Vercel deploy + demo assets (`docs/demo/`)
 - [ ] Update detection (download only new families since last sync)
