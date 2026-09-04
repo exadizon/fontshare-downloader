@@ -1,175 +1,88 @@
-# Fontshare Bulk Font Downloader
+# Fontshare Downloader
 
-A Python tool to download all fonts from [Fontshare.com](https://www.fontshare.com/) using their API endpoint. Since Fontshare doesn't provide a bulk download option, this tool automates the process of downloading their entire font library.
+Bulk-download the full [Fontshare](https://www.fontshare.com/) catalog (100
+free font families) and browse it in a clean web UI. Two parts:
 
-## Features
+- **Python CLI** (`cli/`) - downloads every family ZIP from Fontshare's API,
+  extracts immediately, optionally installs desktop fonts.
+- **Web UI** (`web/`) - Next.js catalog browser with live previews,
+  per-family downloads, and a multi-select bulk queue.
 
-- 🔍 **Auto-discovery**: Automatically finds all available fonts on Fontshare
-- 📥 **Bulk download**: Downloads all fonts using their API endpoint
-- ⚡ **Concurrent downloads**: Configurable concurrent downloads with rate limiting
-- 📊 **Progress tracking**: Real-time progress bars and detailed logging
-- 🔄 **Resume capability**: Skips already downloaded fonts
-- 📁 **Organized storage**: Saves fonts in organized directory structure
+## Quick start
 
-## Installation
-
-1. **Clone or download this repository**
-
-   ```bash
-   cd /path/to/fonshare-download-all
-   ```
-
-2. **Install Python dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Usage
-
-### Basic Usage
+### CLI
 
 ```bash
-python fontshare_downloader.py
+pip install -r cli/requirements.txt
+
+# Download all fonts (extracted to downloads/fonts/<slug>/)
+python cli/download.py
+
+# Download + install for the current user in one step
+python cli/download.py --install --install-scope user
+
+# Install already-downloaded fonts (user or system scope)
+python cli/install.py --scope user
+python cli/install.py --fonts-dir ./downloads/fonts --scope system
 ```
 
-This will:
+Options: `--output-dir`, `--rate-limit` (default 1.0s, be respectful),
+`--max-concurrent` (default 3), `--verbose`. Run `python cli/download.py --help`
+for details.
 
-- Create a `downloads` folder in the current directory
-- Discover all fonts from Fontshare
-- Download each font as a ZIP file
-- Save fonts in `downloads/fonts/` with organized subdirectories
-
-### Advanced Usage
+### Web UI
 
 ```bash
-# Custom output directory
-python fontshare_downloader.py --output-dir ./my-fonts
-
-# Adjust rate limiting (delay between requests)
-python fontshare_downloader.py --rate-limit 2.0
-
-# Increase concurrent downloads
-python fontshare_downloader.py --max-concurrent 5
-
-# Enable verbose logging
-python fontshare_downloader.py --verbose
-
-# Combine options
-python fontshare_downloader.py \
-    --output-dir ./fontshare-collection \
-    --rate-limit 0.5 \
-    --max-concurrent 3 \
-    --verbose
+cd web
+npm install
+npm run dev      # local preview at http://localhost:3000
 ```
 
-### Command Line Options
+Deployed to Vercel for public browsing. Previews stream from Fontshare's CDN,
+downloads link straight to Fontshare's API - no server storage needed.
 
-| Option                   | Description                      | Default       |
-| ------------------------ | -------------------------------- | ------------- |
-| `--output-dir`, `-o`     | Output directory for downloads   | `./downloads` |
-| `--rate-limit`, `-r`     | Delay between requests (seconds) | `1.0`         |
-| `--max-concurrent`, `-c` | Maximum concurrent downloads     | `3`           |
-| `--verbose`, `-v`        | Enable verbose logging           | `False`       |
+### Refresh the catalog
 
-## Output Structure
+Fontshare adds families over time. To update the bundled font options:
 
-After running the tool, your files will be organized as follows:
+```bash
+python scripts/sync_catalog.py
+```
+
+This regenerates `data/fonts.json` (full metadata) and `data/fonts.min.json`
+(slim UI bundle) from the live API.
+
+## Layout
+
+```
+cli/               # canonical downloader + installer
+data/              # generated catalog (do not hand-edit)
+scripts/           # sync_catalog.py + archive/ of retired scripts
+web/               # Next.js + TypeScript + Tailwind UI
+docs/demo/         # screenshots, demo assets
+downloads/         # runtime output, gitignored, never committed
+```
+
+Legacy pre-clean-break scripts live in `scripts/archive/` (unmaintained).
+
+## Output structure
 
 ```
 downloads/
-├── fonts/                    # Downloaded font files
-│   ├── satoshi/
-│   │   └── satoshi.zip
-│   ├── cabinet-grotesk/
-│   │   └── cabinet-grotesk.zip
-│   └── clash-display/
-│       └── clash-display.zip
-├── logs/                     # Log files
-│   └── download.log
-└── metadata/                 # Download metadata
-    └── font-list.json
+  fonts/<slug>/    # extracted family: OTF/, TTF/, WEB/ extras
+  logs/download.log
+  metadata/font-list.json
 ```
 
-## How It Works
+## Licensing
 
-1. **Font Discovery**: The tool visits Fontshare and discovers all available fonts through multiple strategies:
-
-   - Checking for API endpoints that list fonts
-   - Parsing the website for embedded font data
-   - Using a fallback list of known fonts
-
-2. **Download Process**: For each discovered font, it:
-
-   - Constructs the download URL: `https://api.fontshare.com/v2/fonts/download/{font-name}`
-   - Downloads the font ZIP file
-   - Saves it in an organized directory structure
-   - Implements rate limiting to be respectful to the server
-
-3. **Progress Tracking**: Shows real-time progress and logs all activities
-
-## Example Output
-
-```
-🚀 Fontshare Bulk Font Downloader
-========================================
-🔍 Discovering fonts from Fontshare...
-✅ Found 127 fonts via website parsing
-📥 Starting download of 127 fonts...
-
-Downloading fonts: 100%|████████████| 127/127 [05:23<00:00,  2.55s/font]
-
-==================================================
-🎉 Fontshare Bulk Download Complete!
-==================================================
-📁 Fonts saved to: ./downloads/fonts
-📊 Success: 125 fonts
-❌ Failed: 2 fonts
-⏱️  Total time: 323.1 seconds
-📋 Logs saved to: ./downloads/logs/download.log
-```
-
-## Rate Limiting & Ethics
-
-This tool implements rate limiting to be respectful to Fontshare's servers:
-
-- Default 1-second delay between downloads
-- Configurable concurrent download limits
-- Respectful user-agent and request patterns
-
-Please use this tool responsibly and respect Fontshare's terms of service.
-
-## Troubleshooting
-
-### No fonts discovered
-
-- Check your internet connection
-- Fontshare might have changed their website structure
-- The tool will fall back to a known list of popular fonts
-
-### Download failures
-
-- Some fonts might be temporarily unavailable
-- Check the log file for detailed error information
-- Failed downloads can be retried by running the tool again
-
-### Permission errors
-
-- Make sure you have write permissions in the output directory
-- On Windows, you might need to run as administrator
-
-## Font Usage
-
-All fonts downloaded are subject to Fontshare's licensing terms. Please review their [license](https://www.fontshare.com/licenses) before using the fonts in your projects.
+All fonts remain subject to Fontshare's licensing terms (per-family
+`itf_ffl` or `sil_ofl`, recorded in `data/fonts.json`). Review
+[Fontshare licenses](https://www.fontshare.com/licenses) before use.
 
 ## Contributing
 
-Feel free to contribute improvements:
-
-- Better font discovery methods
-- Additional output formats
-- GUI interface
-- Bug fixes and optimizations
-
-## Disclaimer
-
-This tool is for educational and personal use. Please respect Fontshare's terms of service and use their fonts according to their licensing terms. The fonts are provided by Fontshare under their own license agreements.
+- Bug in discovery/download? Reproduce with a single family first, then fix in
+  `cli/download.py`.
+- Catalog out of date? Run `python scripts/sync_catalog.py` and commit `data/`.
+- UI ideas? The web app reads `data/fonts.min.json` at build time.
