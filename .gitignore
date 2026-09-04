@@ -1,0 +1,24 @@
+# Runtime output - never commit binaries
+downloads/
+*.zip
+*.part
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Node / Next.js
+web/node_modules/
+web/.next/
+web/out/
+web/.vercel/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
