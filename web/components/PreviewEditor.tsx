@@ -14,16 +14,16 @@ export default function PreviewEditor({ font }: { font: CatalogFont }) {
   return (
     <div>
       <div className="flex flex-col md:flex-row gap-3 pb-6">
-        <label className="flex-[2] flex items-center gap-3 border border-[var(--color-ink)] bg-[var(--color-card)] px-4 py-2.5">
-          <span className="micro text-[var(--color-smoke)]">Text</span>
+        <label className="flex-[2] flex items-center gap-3 border border-[var(--color-cream)] bg-[var(--color-panel)] px-4 py-2.5">
+          <span className="micro dim">Text</span>
           <input
             value={text}
             onChange={(e) => setText(e.target.value)}
             className="flex-1 bg-transparent outline-none text-base"
           />
         </label>
-        <label className="flex items-center gap-3 border border-[var(--color-ink)] bg-[var(--color-card)] px-4 py-2.5">
-          <span className="micro text-[var(--color-smoke)]">Weight</span>
+        <label className="flex items-center gap-3 border border-[var(--color-cream)] bg-[var(--color-panel)] px-4 py-2.5">
+          <span className="micro dim">Weight</span>
           <select
             value={weight}
             onChange={(e) => setWeight(Number(e.target.value))}
@@ -41,15 +41,15 @@ export default function PreviewEditor({ font }: { font: CatalogFont }) {
             type="button"
             onClick={() => setIsItalic((v) => !v)}
             aria-pressed={isItalic}
-            className={`micro px-4 py-2.5 border border-[var(--color-ink)] ${
-              isItalic ? "bg-[var(--color-ink)] text-[var(--color-paper)]" : ""
+            className={`micro px-4 py-2.5 border border-[var(--color-cream)] ${
+              isItalic ? "bg-[var(--color-cream)] text-[var(--color-coal)]" : ""
             }`}
           >
             Italic
           </button>
         )}
-        <label className="flex items-center gap-3 border border-[var(--color-ink)] bg-[var(--color-card)] px-4 py-2.5">
-          <span className="micro text-[var(--color-smoke)]">{size}px</span>
+        <label className="flex items-center gap-3 border border-[var(--color-cream)] bg-[var(--color-panel)] px-4 py-2.5">
+          <span className="micro dim">{size}px</span>
           <input
             type="range"
             min={16}
@@ -57,7 +57,7 @@ export default function PreviewEditor({ font }: { font: CatalogFont }) {
             value={size}
             onChange={(e) => setSize(Number(e.target.value))}
             aria-label="Preview size"
-            className="w-28 accent-[#16130e]"
+            className="twin-range w-28"
           />
         </label>
       </div>

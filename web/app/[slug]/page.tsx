@@ -53,14 +53,14 @@ export default async function FontPage({ params }: { params: Promise<{ slug: str
       </nav>
 
       <header className="rule-t pt-6 pb-8">
-        <p className="micro text-[var(--color-smoke)]">{font.category}</p>
+        <p className="micro dim">{font.category}</p>
         <h1
           className="font-semibold tracking-tight leading-none mt-2 text-6xl md:text-8xl"
           style={{ fontFamily: `'${font.name}', sans-serif` }}
         >
           {font.name}
         </h1>
-        <p className="mt-3 text-[var(--color-smoke)]">
+        <p className="mt-3 dim">
           by {font.designers.join(", ") || "Unknown designer"}
           {"  "}· {weights.length} weight{weights.length === 1 ? "" : "s"}
           {isVariable(font) ? " · Variable" : ""}
@@ -77,7 +77,7 @@ export default async function FontPage({ params }: { params: Promise<{ slug: str
 
       <section className="grid md:grid-cols-3 gap-8 mt-12" aria-label="Family details">
         <div>
-          <h2 className="micro text-[var(--color-smoke)] pb-2">Weights</h2>
+          <h2 className="micro dim pb-2">Weights</h2>
           <ul className="rule-t">
             {font.styles
               .filter((s) => !s.is_italic)
@@ -86,15 +86,15 @@ export default async function FontPage({ params }: { params: Promise<{ slug: str
                   <span style={{ fontFamily: `'${font.name}', sans-serif`, fontWeight: s.weight_number }}>
                     {s.weight_name}
                   </span>
-                  <span className="text-[var(--color-smoke)]">{s.weight_number}</span>
+                  <span className="dim">{s.weight_number}</span>
                 </li>
               ))}
           </ul>
         </div>
         <div>
-          <h2 className="micro text-[var(--color-smoke)] pb-2">Tags</h2>
+          <h2 className="micro dim pb-2">Tags</h2>
           <ul className="rule-t">
-            {font.tags.length === 0 && <li className="rule-b py-2 text-sm text-[var(--color-smoke)]">No tags</li>}
+            {font.tags.length === 0 && <li className="rule-b py-2 text-sm dim">No tags</li>}
             {font.tags.map((t) => (
               <li key={t} className="rule-b py-2 text-sm">
                 {t}
@@ -103,7 +103,7 @@ export default async function FontPage({ params }: { params: Promise<{ slug: str
           </ul>
         </div>
         <div>
-          <h2 className="micro text-[var(--color-smoke)] pb-2">License and source</h2>
+          <h2 className="micro dim pb-2">License and source</h2>
           <div className="rule-t text-sm">
             <p className="rule-b py-2 flex justify-between">
               <span>License</span>
@@ -129,14 +129,14 @@ export default async function FontPage({ params }: { params: Promise<{ slug: str
 
       {related.length > 0 && (
         <section className="mt-12" aria-label="Related families">
-          <h2 className="micro text-[var(--color-smoke)] pb-3">Related families</h2>
+          <h2 className="micro dim pb-3">Related families</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6">
             {related.map((r) => (
               <Link key={r.slug} href={`/${r.slug}`} className="rule-t py-3 group">
                 <p className="font-display font-semibold text-lg group-hover:underline underline-offset-4">
                   {r.name}
                 </p>
-                <p className="micro text-[var(--color-smoke)] mt-1">{r.category}</p>
+                <p className="micro dim mt-1">{r.category}</p>
               </Link>
             ))}
           </div>
