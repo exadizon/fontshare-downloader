@@ -2,12 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * Injects a preview stylesheet only once the wrapped content nears the
- * viewport. Keeps the 100-card grid from firing 100 CSS requests on load.
- */
-export default function LazyFontCss({ href, children }: { href: string; children: React.ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
+export default function LazyFontLink({ href }: { href: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
   const [active, setActive] = useState(false);
 
   useEffect(() => {
@@ -20,16 +16,15 @@ export default function LazyFontCss({ href, children }: { href: string; children
           observer.disconnect();
         }
       },
-      { rootMargin: "500px" }
+      { rootMargin: "600px" }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div ref={ref}>
-      {active && <link rel="stylesheet" href={href} />}
-      {children}
-    </div>
+    <span ref={ref} className="hidden" aria-hidden="true">
+      {active ? <link rel="stylesheet" href={href} /> : null}
+    </span>
   );
 }

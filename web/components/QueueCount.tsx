@@ -3,13 +3,27 @@
 import { useQueue } from "../lib/queue";
 
 export default function QueueCount() {
-  const { slugs } = useQueue();
+  const { slugs, downloadAll, isDownloading } = useQueue();
+
   if (slugs.length === 0) {
-    return <span className="text-sm dim">No styles selected</span>;
+    return (
+      <div className="flex items-center gap-2 text-xs text-[var(--color-muted)] font-mono">
+        <span className="w-2 h-2 rounded-full bg-[var(--color-border)]" />
+        <span>0 QUEUED</span>
+      </div>
+    );
   }
+
   return (
-    <span className="text-sm">
-      {slugs.length} famil{slugs.length === 1 ? "y" : "ies"} queued
-    </span>
+    <button
+      type="button"
+      onClick={() => downloadAll()}
+      disabled={isDownloading}
+      className="flex items-center gap-2 px-2.5 py-1 bg-[var(--color-text)] text-[var(--color-bg)] text-xs font-bold font-mono tracking-wider transition-transform hover:scale-105 border border-[var(--color-border)] cursor-pointer"
+      title="Click to download queued fonts"
+    >
+      <span className="w-2 h-2 rounded-full bg-[var(--color-bg)] animate-pulse" />
+      <span>{slugs.length} QUEUED</span>
+    </button>
   );
 }

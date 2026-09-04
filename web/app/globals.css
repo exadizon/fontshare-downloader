@@ -1,154 +1,243 @@
 @import "tailwindcss";
 
-/* Theme tokens as plain runtime vars so [data-theme] can flip them live.
-   Dark is the default twin look; light inverts the pairs. */
-:root {
-  --color-coal: #0b0b0a;
-  --color-panel: #131311;
-  --color-cream: #f2eddc;
-  --color-fog: #8f8a78;
-  --color-edge: #2b2a26;
+/* Authentic Fontshare Parchment & Charcoal Design System
+   Signature warm pale parchment canvas (#FEFEE2) with deep charcoal typography (#111111) and crisp hairline grids */
+:root,
+[data-theme="light"] {
+  --color-bg: #FEFEE2;
+  --color-panel: #F4F4D4;
+  --color-card: #FEFEE2;
+  --color-card-hover: #F0F0CC;
+  --color-border: #E0E0BC;
+  --color-border-subtle: #EBEBC8;
+  --color-border-active: #111111;
+  --color-text: #111111;
+  --color-muted: #666655;
+  --color-dim: #999985;
+  --color-charcoal: #111111;
+  --color-parchment: #FEFEE2;
+  --color-parchment-deep: #ECECBF;
+  --color-accent: #111111;
+  --color-accent-text: #FEFEE2;
 }
 
-[data-theme="light"] {
-  --color-coal: #f4f1e9;
-  --color-panel: #fbf9f3;
-  --color-cream: #16130e;
-  --color-fog: #6f6a5c;
-  --color-edge: #d9d3c1;
+[data-theme="dark"] {
+  --color-bg: #111111;
+  --color-panel: #181818;
+  --color-card: #151515;
+  --color-card-hover: #202020;
+  --color-border: #2C2C26;
+  --color-border-subtle: #22221D;
+  --color-border-active: #FEFEE2;
+  --color-text: #FEFEE2;
+  --color-muted: #A8A892;
+  --color-dim: #707060;
+  --color-charcoal: #FEFEE2;
+  --color-parchment: #111111;
+  --color-parchment-deep: #242420;
+  --color-accent: #FEFEE2;
+  --color-accent-text: #111111;
 }
 
 html {
-  background: var(--color-coal);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+[data-theme="light"], :root:not([data-theme="dark"]) {
+  color-scheme: light;
 }
 
 body {
-  background: var(--color-coal);
-  color: var(--color-cream);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   font-family: "General Sans", system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+svg {
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .font-display {
-  font-family: "Satoshi", "Archivo", system-ui, sans-serif;
+  font-family: "Satoshi", "General Sans", system-ui, sans-serif;
 }
 
-/* Segmented header cells, divided by hairlines */
-.cell {
-  border-left: 1px solid var(--color-edge);
-}
-.cell-active {
-  background: var(--color-cream);
-  color: var(--color-coal);
+/* Hairline wireframe borders */
+.border-line {
+  border: 1px solid var(--color-border);
 }
 
-/* Micro uppercase labels */
-.micro {
+.border-line-t {
+  border-top: 1px solid var(--color-border);
+}
+
+.border-line-b {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.border-line-l {
+  border-left: 1px solid var(--color-border);
+}
+
+.border-line-r {
+  border-right: 1px solid var(--color-border);
+}
+
+/* Segmented header cells */
+.fs-cell {
+  border-left: 1px solid var(--color-border);
+}
+
+/* Micro uppercase fontshare labels */
+.micro-label {
   font-size: 0.6875rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 600;
 }
 
-/* Dimmed twin-tone text */
-.dim {
-  color: var(--color-fog);
+/* Primary Inverted Button (Deep Charcoal block with parchment text) */
+.btn-solid,
+.btn-primary,
+.btn-lime {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  font-weight: 700;
+  border: 1px solid var(--color-text);
+  transition: all 0.15s ease;
 }
 
-/* Hairline dividers */
-.rule-t {
-  border-top: 1px solid var(--color-edge);
-}
-.rule-b {
-  border-bottom: 1px solid var(--color-edge);
-}
-.box {
-  border: 1px solid var(--color-edge);
+.btn-solid:hover,
+.btn-primary:hover,
+.btn-lime:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
-/* Solid cream button */
-.btn-ink {
-  background: var(--color-cream);
-  color: var(--color-coal);
+.btn-solid:active,
+.btn-primary:active,
+.btn-lime:active {
+  transform: translateY(0);
+}
+
+.btn-solid:disabled,
+.btn-primary:disabled,
+.btn-lime:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Wireframe Outline Button */
+.btn-outline {
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  background-color: var(--color-card);
   font-weight: 600;
-  transition: opacity 0.15s ease;
+  transition: all 0.15s ease;
 }
-.btn-ink:hover {
-  opacity: 0.85;
+
+.btn-outline:hover {
+  border-color: var(--color-text);
+  background-color: var(--color-card-hover);
 }
-.btn-ink:disabled {
+
+.btn-outline:disabled {
   opacity: 0.4;
-  cursor: default;
+  cursor: not-allowed;
 }
 
-/* Outline button */
-.btn-line {
-  border: 1px solid var(--color-cream);
-  color: var(--color-cream);
-  font-weight: 600;
-  transition: background 0.15s ease;
-}
-.btn-line:hover {
-  background: rgba(242, 237, 220, 0.08);
-}
-
-/* Single-line preview clipping */
-.preview-line {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* Monochromatic Inverted Badge */
+.badge-solid,
+.badge-lime {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
 }
 
-/* Twin-style range slider: thin track, hollow circle thumb */
-input[type="range"].twin-range {
+/* Subtle Wireframe Tag */
+.badge-tag {
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  background-color: var(--color-panel);
+}
+
+/* Range Slider */
+input[type="range"].fs-range {
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
-  height: 20px;
+  height: 22px;
+  cursor: pointer;
 }
-input[type="range"].twin-range::-webkit-slider-runnable-track {
-  height: 1px;
-  background: var(--color-cream);
+
+input[type="range"].fs-range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--color-border);
+  border-radius: 1px;
 }
-input[type="range"].twin-range::-webkit-slider-thumb {
+
+input[type="range"].fs-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 14px;
   height: 14px;
-  border-radius: 9999px;
-  border: 1.5px solid var(--color-cream);
-  background: var(--color-coal);
-  margin-top: -6.5px;
-}
-input[type="range"].twin-range::-moz-range-track {
-  height: 1px;
-  background: var(--color-cream);
-}
-input[type="range"].twin-range::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  border-radius: 9999px;
-  border: 1.5px solid var(--color-cream);
-  background: var(--color-coal);
+  border-radius: 2px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-text);
+  margin-top: -6px;
+  transition: transform 0.1s ease;
 }
 
-/* Dark form controls */
-.twin-input {
-  background: transparent;
-  outline: none;
-  color: var(--color-cream);
+input[type="range"].fs-range::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
 }
-.twin-input::placeholder {
-  color: var(--color-fog);
+
+input[type="range"].fs-range::-moz-range-track {
+  height: 2px;
+  background: var(--color-border);
+  border-radius: 1px;
 }
-.twin-select {
-  background: transparent;
-  color: var(--color-cream);
-  outline: none;
+
+input[type="range"].fs-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-text);
 }
-.twin-select option {
-  background: var(--color-panel);
-  color: var(--color-cream);
-  text-transform: none;
-  letter-spacing: normal;
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
 }

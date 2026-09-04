@@ -1,95 +1,73 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import "./globals.css";
-import { COUNT_TOTAL } from "../lib/fonts";
 import { QueueProvider } from "../lib/queue";
-import QueueCount from "../components/QueueCount";
-import ThemeToggle from "../components/ThemeToggle";
+import Navbar from "../components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Fontshare Bulk - Browse and download all 100 free families",
+  title: "Fontshare Bulk Downloader - Download all 100 free families",
   description:
-    "Preview every Fontshare font family, download individuals, or queue the full catalog for bulk download.",
+    "The bulk font downloader for Fontshare. Batch download the full 100-family catalog, filter by category or variable axes, export terminal scripts, or auto-install directly to your system.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
       <head>
-        {/* Satoshi is the primary chrome face; body text uses General Sans. */}
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900&f[]=general-sans@400,500,600&display=swap"
-        />
-        {/* Apply saved theme before paint to avoid a dark flash. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('fsb-theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}`,
+            __html: `(function(){try{var t=localStorage.getItem("fsb-theme")||"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();`,
           }}
         />
+        {/* Satoshi for display, General Sans for body & UI */}
+        <link
+          rel="stylesheet"
+          href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900&f[]=general-sans@400,500,600,700&display=swap"
+        />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-[var(--color-bg)] text-[var(--color-text)]">
         <QueueProvider>
-          <header className="rule-b">
-            <div className="mx-auto max-w-7xl flex items-stretch">
-              <Link
-                href="/"
-                className="font-display font-bold text-xl tracking-tight px-5 py-5 flex items-center shrink-0"
-              >
-                Fontshare Bulk™
-              </Link>
-              <nav className="flex items-stretch flex-1 min-w-0" aria-label="Primary">
-                <Link
-                  href="/"
-                  className="cell cell-active hidden sm:flex flex-col justify-between px-8 py-3 min-w-36"
-                  aria-current="page"
-                >
-                  <span className="text-sm font-medium text-center">Fonts</span>
-                  <span className="micro">{COUNT_TOTAL}</span>
-                </Link>
-                <a
-                  href="https://www.fontshare.com/licenses"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="cell hidden md:flex flex-col justify-between px-8 py-3 min-w-36 hover:bg-[var(--color-panel)]"
-                >
-                  <span className="text-sm font-medium text-center">Licenses</span>
-                  <span className="micro dim">ITF / OFL</span>
-                </a>
-                <div className="cell flex-1 hidden lg:block" aria-hidden="true" />
-                <div className="cell px-5 py-3 flex items-center justify-end gap-3 min-w-44">
-                  <ThemeToggle />
-                  <QueueCount />
-                </div>
-              </nav>
-            </div>
-          </header>
+          <Navbar />
           <div className="flex-1">{children}</div>
-          <footer className="rule-t mt-16">
-            <div className="mx-auto max-w-7xl px-5 py-8 flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-sm dim">
-              <p>
-                Fonts by the Indian Type Foundry. Each family keeps its own
-                license (ITF FFL or SIL OFL).
-              </p>
-              <p>
+          <footer className="border-t border-[var(--color-border)] mt-20 bg-[var(--color-panel)]">
+            <div className="mx-auto max-w-7xl px-5 py-10 flex flex-col md:flex-row gap-6 md:items-center justify-between text-xs text-[var(--color-muted)]">
+              <div>
+                <p className="font-semibold text-[var(--color-text)] mb-1">
+                  FONTSHARE BULK DOWNLOADER
+                </p>
+                <p>
+                  Free quality fonts released by the Indian Type Foundry (ITF). Each font retains its original license (ITF FFL or SIL OFL).
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-5 text-[11px] uppercase tracking-wider font-mono">
                 <a
                   href="https://www.fontshare.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="underline underline-offset-4"
+                  className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
                 >
-                  fontshare.com
-                </a>{" "}
-                ·{" "}
+                  Fontshare Official &nearr;
+                </a>
                 <a
                   href="https://www.fontshare.com/licenses"
                   target="_blank"
                   rel="noreferrer"
-                  className="underline underline-offset-4"
+                  className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
                 >
-                  License details
+                  License Terms &nearr;
                 </a>
-              </p>
+                <a
+                  href="https://github.com/exadizon/fontshare-downloader"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
+                >
+                  GitHub Repository &nearr;
+                </a>
+              </div>
             </div>
           </footer>
         </QueueProvider>
