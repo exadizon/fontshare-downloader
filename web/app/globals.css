@@ -1,23 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f4f1e9;
-  --color-paper-deep: #eae5d6;
-  --color-ink: #16130e;
-  --color-smoke: #6f6a5c;
-  --color-line: #16130e;
-  --color-card: #faf8f2;
+  --color-coal: #0b0b0a;
+  --color-panel: #131311;
+  --color-cream: #f2eddc;
+  --color-fog: #8f8a78;
+  --color-edge: #2b2a26;
   --font-display: "Clash Display", "Archivo", system-ui, sans-serif;
   --font-body: "General Sans", system-ui, -apple-system, sans-serif;
 }
 
 html {
-  background: var(--color-paper);
+  background: var(--color-coal);
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--color-coal);
+  color: var(--color-cream);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
@@ -26,12 +25,13 @@ body {
   font-family: var(--font-display);
 }
 
-/* Thin-rule dividers, Fontshare style */
-.rule-t {
-  border-top: 1px solid var(--color-ink);
+/* Segmented header cells, divided by hairlines */
+.cell {
+  border-left: 1px solid var(--color-edge);
 }
-.rule-b {
-  border-bottom: 1px solid var(--color-ink);
+.cell-active {
+  background: var(--color-cream);
+  color: var(--color-coal);
 }
 
 /* Micro uppercase labels */
@@ -42,10 +42,26 @@ body {
   font-weight: 600;
 }
 
-/* Solid ink button */
+/* Dimmed twin-tone text */
+.dim {
+  color: var(--color-fog);
+}
+
+/* Hairline dividers */
+.rule-t {
+  border-top: 1px solid var(--color-edge);
+}
+.rule-b {
+  border-bottom: 1px solid var(--color-edge);
+}
+.box {
+  border: 1px solid var(--color-edge);
+}
+
+/* Solid cream button */
 .btn-ink {
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-cream);
+  color: var(--color-coal);
   font-weight: 600;
   transition: opacity 0.15s ease;
 }
@@ -59,13 +75,13 @@ body {
 
 /* Outline button */
 .btn-line {
-  border: 1px solid var(--color-ink);
-  color: var(--color-ink);
+  border: 1px solid var(--color-cream);
+  color: var(--color-cream);
   font-weight: 600;
   transition: background 0.15s ease;
 }
 .btn-line:hover {
-  background: rgba(22, 19, 14, 0.06);
+  background: rgba(242, 237, 220, 0.08);
 }
 
 /* Single-line preview clipping */
@@ -73,4 +89,58 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Twin-style range slider: thin track, hollow circle thumb */
+input[type="range"].twin-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 20px;
+}
+input[type="range"].twin-range::-webkit-slider-runnable-track {
+  height: 1px;
+  background: var(--color-cream);
+}
+input[type="range"].twin-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-cream);
+  background: var(--color-coal);
+  margin-top: -6.5px;
+}
+input[type="range"].twin-range::-moz-range-track {
+  height: 1px;
+  background: var(--color-cream);
+}
+input[type="range"].twin-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-cream);
+  background: var(--color-coal);
+}
+
+/* Dark form controls */
+.twin-input {
+  background: transparent;
+  outline: none;
+  color: var(--color-cream);
+}
+.twin-input::placeholder {
+  color: var(--color-fog);
+}
+.twin-select {
+  background: transparent;
+  color: var(--color-cream);
+  outline: none;
+}
+.twin-select option {
+  background: var(--color-panel);
+  color: var(--color-cream);
+  text-transform: none;
+  letter-spacing: normal;
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { COUNT_TOTAL } from "../lib/fonts";
 import { QueueProvider } from "../lib/queue";
 import QueueCount from "../components/QueueCount";
 
@@ -23,35 +24,55 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <QueueProvider>
           <header className="rule-b">
-            <div className="mx-auto max-w-6xl px-5 py-4 flex items-center justify-between gap-4">
-              <Link href="/" className="font-display font-semibold text-xl tracking-tight">
-                Fontshare Bulk
+            <div className="mx-auto max-w-7xl flex items-stretch">
+              <Link
+                href="/"
+                className="font-display font-semibold text-xl tracking-tight px-5 py-5 flex items-center shrink-0"
+              >
+                Fontshare Bulk™
               </Link>
-              <nav className="flex items-center gap-5 text-sm font-medium">
-                <Link href="/" className="hover:underline underline-offset-4">
-                  Catalog
+              <nav className="flex items-stretch flex-1 min-w-0" aria-label="Primary">
+                <Link
+                  href="/"
+                  className="cell cell-active hidden sm:flex flex-col justify-between px-8 py-3 min-w-36"
+                  aria-current="page"
+                >
+                  <span className="text-sm font-medium text-center">Fonts</span>
+                  <span className="micro">{COUNT_TOTAL}</span>
                 </Link>
                 <a
-                  href="https://www.fontshare.com"
+                  href="https://www.fontshare.com/licenses"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:underline underline-offset-4"
+                  className="cell hidden md:flex flex-col justify-between px-8 py-3 min-w-36 hover:bg-[var(--color-panel)]"
                 >
-                  Fontshare
+                  <span className="text-sm font-medium text-center">Licenses</span>
+                  <span className="micro dim">ITF / OFL</span>
                 </a>
-                <QueueCount />
+                <div className="cell flex-1 hidden lg:block" aria-hidden="true" />
+                <div className="cell px-5 py-3 flex items-center justify-end min-w-44">
+                  <QueueCount />
+                </div>
               </nav>
             </div>
           </header>
           <div className="flex-1">{children}</div>
           <footer className="rule-t mt-16">
-            <div className="mx-auto max-w-6xl px-5 py-8 flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-sm text-[var(--color-smoke)]">
+            <div className="mx-auto max-w-7xl px-5 py-8 flex flex-col sm:flex-row gap-3 sm:items-center justify-between text-sm dim">
               <p>
-                Fonts by the Indian Type Foundry. Downloads subject to each
-                family&apos;s license (ITF FFL or SIL OFL).
+                Fonts by the Indian Type Foundry. Each family keeps its own
+                license (ITF FFL or SIL OFL).
               </p>
               <p>
-                Catalog synced from the live Fontshare API.{" "}
+                <a
+                  href="https://www.fontshare.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-4"
+                >
+                  fontshare.com
+                </a>{" "}
+                ·{" "}
                 <a
                   href="https://www.fontshare.com/licenses"
                   target="_blank"
