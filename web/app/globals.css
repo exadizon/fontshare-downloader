@@ -1,13 +1,21 @@
 @import "tailwindcss";
 
-@theme {
+/* Theme tokens as plain runtime vars so [data-theme] can flip them live.
+   Dark is the default twin look; light inverts the pairs. */
+:root {
   --color-coal: #0b0b0a;
   --color-panel: #131311;
   --color-cream: #f2eddc;
   --color-fog: #8f8a78;
   --color-edge: #2b2a26;
-  --font-display: "Clash Display", "Archivo", system-ui, sans-serif;
-  --font-body: "General Sans", system-ui, -apple-system, sans-serif;
+}
+
+[data-theme="light"] {
+  --color-coal: #f4f1e9;
+  --color-panel: #fbf9f3;
+  --color-cream: #16130e;
+  --color-fog: #6f6a5c;
+  --color-edge: #d9d3c1;
 }
 
 html {
@@ -17,12 +25,12 @@ html {
 body {
   background: var(--color-coal);
   color: var(--color-cream);
-  font-family: var(--font-body);
+  font-family: "General Sans", system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 .font-display {
-  font-family: var(--font-display);
+  font-family: "Satoshi", "Archivo", system-ui, sans-serif;
 }
 
 /* Segmented header cells, divided by hairlines */

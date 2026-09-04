@@ -4,6 +4,7 @@ import "./globals.css";
 import { COUNT_TOTAL } from "../lib/fonts";
 import { QueueProvider } from "../lib/queue";
 import QueueCount from "../components/QueueCount";
+import ThemeToggle from "../components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "Fontshare Bulk - Browse and download all 100 free families",
@@ -15,10 +16,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased">
       <head>
-        {/* UI chrome type, dogfooded from the Fontshare CDN */}
+        {/* Satoshi is the primary chrome face; body text uses General Sans. */}
         <link
           rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=general-sans@400,500,600&display=swap"
+          href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900&f[]=general-sans@400,500,600&display=swap"
+        />
+        {/* Apply saved theme before paint to avoid a dark flash. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('fsb-theme');if(t==='light'){document.documentElement.setAttribute('data-theme','light')}}catch(e){}`,
+          }}
         />
       </head>
       <body className="min-h-full flex flex-col">
@@ -27,7 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <div className="mx-auto max-w-7xl flex items-stretch">
               <Link
                 href="/"
-                className="font-display font-semibold text-xl tracking-tight px-5 py-5 flex items-center shrink-0"
+                className="font-display font-bold text-xl tracking-tight px-5 py-5 flex items-center shrink-0"
               >
                 Fontshare Bulk™
               </Link>
@@ -50,7 +57,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                   <span className="micro dim">ITF / OFL</span>
                 </a>
                 <div className="cell flex-1 hidden lg:block" aria-hidden="true" />
-                <div className="cell px-5 py-3 flex items-center justify-end min-w-44">
+                <div className="cell px-5 py-3 flex items-center justify-end gap-3 min-w-44">
+                  <ThemeToggle />
                   <QueueCount />
                 </div>
               </nav>
