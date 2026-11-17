@@ -12,6 +12,7 @@ import {
   type CatalogFont,
 } from "../lib/fonts";
 import { useQueue } from "../lib/queue";
+import { usePresence } from "../lib/usePresence";
 
 interface QuickSpecimenDrawerProps {
   font: CatalogFont | null;
@@ -19,7 +20,7 @@ interface QuickSpecimenDrawerProps {
 }
 
 export default function QuickSpecimenDrawer({
-  font,
+  font: incomingFont,
   onClose,
 }: QuickSpecimenDrawerProps) {
   const { has, toggle } = useQueue();
@@ -29,6 +30,12 @@ export default function QuickSpecimenDrawer({
   const [fontSize, setFontSize] = useState(36);
   const [customWeight, setCustomWeight] = useState<number | null>(null);
 
+  const { mounted, visible } = usePresence(incomingFont !== null, 420);
+  // Keep the last family on screen while the panel slides back out. Adjusting
+  // state from props during render is React's supported pattern for this.
+  const [font, setFont] = useState<CatalogFont | null>(incomingFont);
+  if (incomingFont && incomingFont !== font) setFont(incomingFont);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -37,7 +44,7 @@ export default function QuickSpecimenDrawer({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  if (!font) return null;
+  if (!mounted || !font) return null;
 
   const weights = weightsOf(font);
   const defaultWeight = weights.includes(400) ? 400 : weights[0] ?? 400;
@@ -49,13 +56,21 @@ export default function QuickSpecimenDrawer({
   const isSelected = has(font.slug);
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/70">
+    <div
+      className="specimen-overlay fixed inset-0 z-50 flex justify-end"
+      data-state={visible ? "open" : "closed"}
+      data-lenis-prevent
+    >
       {/* Click backdrop to close */}
-      <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
+      <div
+        className="specimen-backdrop fixed inset-0 bg-black/70"
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
       <link rel="stylesheet" href={cssUrl(font, weights)} />
 
-      <aside className="relative w-full max-w-2xl bg-[var(--color-card)] border-l border-[var(--color-border)] h-full flex flex-col shadow-lg z-10 overflow-hidden">
+      <aside className="specimen-panel relative w-full max-w-2xl bg-[var(--color-card)] border-l border-[var(--color-border)] h-full flex flex-col shadow-lg z-10 overflow-hidden">
         {/* Top bar */}
         <div className="p-5 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-panel)] shrink-0">
           <div className="flex items-center gap-3">

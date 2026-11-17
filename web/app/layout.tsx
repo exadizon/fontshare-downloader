@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "lenis/dist/lenis.css";
 import { QueueProvider } from "../lib/queue";
 import Navbar from "../components/Navbar";
+import SmoothScroll from "../components/SmoothScroll";
 
 export const metadata: Metadata = {
   title: "Fontshare Bulk Downloader - Download all 100 free families",
@@ -29,48 +31,50 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-[var(--color-bg)] text-[var(--color-text)]">
-        <QueueProvider>
-          <Navbar />
-          <div className="flex-1">{children}</div>
-          <footer className="border-t border-[var(--color-border)] mt-20 bg-[var(--color-panel)]">
-            <div className="mx-auto max-w-7xl px-5 py-10 flex flex-col md:flex-row gap-6 md:items-center justify-between text-xs text-[var(--color-muted)]">
-              <div>
-                <p className="font-semibold text-[var(--color-text)] mb-1">
-                  Fontshare Bulk Downloader
-                </p>
-                <p>
-                  Free quality fonts released by the Indian Type Foundry (ITF). Each font retains its original license (ITF FFL or SIL OFL).
-                </p>
+        <SmoothScroll>
+          <QueueProvider>
+            <Navbar />
+            <div className="flex-1">{children}</div>
+            <footer className="border-t border-[var(--color-border)] mt-20 bg-[var(--color-panel)]">
+              <div className="mx-auto max-w-7xl px-5 py-10 flex flex-col md:flex-row gap-6 md:items-center justify-between text-xs text-[var(--color-muted)]">
+                <div>
+                  <p className="font-semibold text-[var(--color-text)] mb-1">
+                    Fontshare Bulk Downloader
+                  </p>
+                  <p>
+                    Free quality fonts released by the Indian Type Foundry (ITF). Each font retains its original license (ITF FFL or SIL OFL).
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-5 text-[11px]">
+                  <a
+                    href="https://www.fontshare.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
+                  >
+                    Fontshare Official
+                  </a>
+                  <a
+                    href="https://www.fontshare.com/licenses"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
+                  >
+                    License Terms
+                  </a>
+                  <a
+                    href="https://github.com/exadizon/fontshare-downloader"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
+                  >
+                    GitHub Repository
+                  </a>
+                </div>
               </div>
-              <div className="flex flex-wrap items-center gap-5 text-[11px]">
-                <a
-                  href="https://www.fontshare.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
-                >
-                  Fontshare Official
-                </a>
-                <a
-                  href="https://www.fontshare.com/licenses"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
-                >
-                  License Terms
-                </a>
-                <a
-                  href="https://github.com/exadizon/fontshare-downloader"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
-                >
-                  GitHub Repository
-                </a>
-              </div>
-            </div>
-          </footer>
-        </QueueProvider>
+            </footer>
+          </QueueProvider>
+        </SmoothScroll>
       </body>
     </html>
   );

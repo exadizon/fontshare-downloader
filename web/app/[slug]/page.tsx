@@ -66,7 +66,7 @@ export default async function FontPage({
       </nav>
 
       {/* Family Header Banner */}
-      <header className="border border-[var(--color-border)] bg-[var(--color-panel)] p-6 md:p-10 mb-8">
+      <header className="hero-enter hero-enter-1 border border-[var(--color-border)] bg-[var(--color-panel)] p-6 md:p-10 mb-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-2 text-xs text-[var(--color-muted)]">
@@ -108,7 +108,7 @@ export default async function FontPage({
       </header>
 
       {/* Live Specimen Preview Section */}
-      <section className="border border-[var(--color-border)] bg-[var(--color-card)] p-6 md:p-8 mb-8" aria-label="Live preview">
+      <section className="hero-enter hero-enter-2 border border-[var(--color-border)] bg-[var(--color-card)] p-6 md:p-8 mb-8" aria-label="Live preview">
         <h2 className="micro-label text-[var(--color-muted)] mb-4">
           Live Interactive Specimen
         </h2>
@@ -116,7 +116,7 @@ export default async function FontPage({
       </section>
 
       {/* Metadata & Weights Breakdown */}
-      <section className="grid md:grid-cols-3 gap-6" aria-label="Family details">
+      <section className="hero-enter hero-enter-3 grid md:grid-cols-3 gap-6" aria-label="Family details">
         {/* Weights List */}
         <div className="border border-[var(--color-border)] bg-[var(--color-panel)] p-6">
           <h2 className="micro-label text-[var(--color-muted)] pb-3 border-b border-[var(--color-border)] mb-3">
@@ -197,7 +197,7 @@ export default async function FontPage({
 
       {/* Related Families */}
       {related.length > 0 && (
-        <section className="mt-12" aria-label="Related families">
+        <section className="hero-enter hero-enter-4 mt-12" aria-label="Related families">
           <h2 className="micro-label text-[var(--color-muted)] mb-4">
             More {font.category} Families
           </h2>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePresence } from "../lib/usePresence";
 
 interface CliHelperModalProps {
   isOpen: boolean;
@@ -29,8 +30,9 @@ function Command({ text, copyKey, onCopy, copied }: { text: string; copyKey: str
 export default function CliHelperModal({ isOpen, onClose }: CliHelperModalProps) {
   const [activeTab, setActiveTab] = useState<TabKey>("site");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const { mounted, visible } = usePresence(isOpen, 250);
 
-  if (!isOpen) return null;
+  if (!mounted) return null;
 
   const copy = async (key: string, text: string) => {
     try {
@@ -50,12 +52,20 @@ export default function CliHelperModal({ isOpen, onClose }: CliHelperModalProps)
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+    <div
+      className="guide-overlay fixed inset-0 z-50 flex items-center justify-center p-4"
+      data-state={visible ? "open" : "closed"}
+      data-lenis-prevent
+    >
       {/* Backdrop click */}
-      <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
+      <div
+        className="guide-backdrop fixed inset-0 bg-black/80"
+        onClick={onClose}
+        aria-hidden="true"
+      />
 
       <div
-        className="relative w-full max-w-3xl bg-[var(--color-card)] border border-[var(--color-border)] p-6 md:p-8 shadow-lg z-10 max-h-[90vh] flex flex-col overflow-hidden"
+        className="guide-panel relative w-full max-w-3xl bg-[var(--color-card)] border border-[var(--color-border)] p-6 md:p-8 shadow-lg z-10 max-h-[90vh] flex flex-col overflow-hidden"
         role="dialog"
         aria-modal="true"
         aria-label="Guide"

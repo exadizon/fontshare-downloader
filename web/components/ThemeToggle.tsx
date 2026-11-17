@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
 const STORAGE_KEY = "fsb-theme";
@@ -30,15 +30,34 @@ function getServerSnapshot(): Theme {
 
 export default function ThemeToggle() {
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const transitionTimer = useRef<number | undefined>(undefined);
+
+  useEffect(() => () => window.clearTimeout(transitionTimer.current), []);
 
   const toggle = () => {
     const next: Theme = theme === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", next);
+    const root = document.documentElement;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!reduce) {
+      // Arm the transition against the old theme before swapping the tokens.
+      root.classList.add("theme-transition");
+      void root.offsetWidth;
+    }
+    root.setAttribute("data-theme", next);
+
     try {
       localStorage.setItem(STORAGE_KEY, next);
       window.dispatchEvent(new Event("fsb-theme-change"));
     } catch {
       /* ignore */
+    }
+
+    if (!reduce) {
+      window.clearTimeout(transitionTimer.current);
+      transitionTimer.current = window.setTimeout(() => {
+        root.classList.remove("theme-transition");
+      }, 300);
     }
   };
 
@@ -54,10 +73,11 @@ export default function ThemeToggle() {
       {theme === "dark" ? (
         <>
           <svg
+            key="dark"
             width="14"
             height="14"
             style={{ width: 14, height: 14, minWidth: 14, minHeight: 14, display: "inline-block" }}
-            className="w-3.5 h-3.5 shrink-0"
+            className="theme-icon w-3.5 h-3.5 shrink-0"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -70,10 +90,11 @@ export default function ThemeToggle() {
       ) : (
         <>
           <svg
+            key="light"
             width="14"
             height="14"
             style={{ width: 14, height: 14, minWidth: 14, minHeight: 14, display: "inline-block" }}
-            className="w-3.5 h-3.5 shrink-0"
+            className="theme-icon w-3.5 h-3.5 shrink-0"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

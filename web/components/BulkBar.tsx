@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useQueue, type ScriptKind } from "../lib/queue";
 import { FONTS } from "../lib/fonts";
+import { usePresence } from "../lib/usePresence";
 
 export default function BulkBar() {
   const {
@@ -20,8 +21,9 @@ export default function BulkBar() {
 
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [copiedKind, setCopiedKind] = useState<ScriptKind | null>(null);
+  const { mounted, visible } = usePresence(slugs.length > 0 || isDownloading, 420);
 
-  if (slugs.length === 0 && !isDownloading) return null;
+  if (!mounted) return null;
 
   // Calculate total styles selected
   const totalStyles = slugs.reduce((acc, slug) => {
@@ -38,7 +40,10 @@ export default function BulkBar() {
   };
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-40 bg-[var(--color-card)] border-t border-[var(--color-border)] shadow-bulkbar">
+    <div
+      className="bulk-dock fixed bottom-0 inset-x-0 z-40 bg-[var(--color-card)] border-t border-[var(--color-border)] shadow-bulkbar"
+      data-state={visible ? "open" : "closed"}
+    >
       {/* Active Download Progress Bar (transform, never width) */}
       {isDownloading && downloadProgress && (
         <div className="w-full bg-[var(--color-panel)] h-1.5 overflow-hidden">
@@ -140,7 +145,7 @@ export default function BulkBar() {
                       onClick={() => setShowExportMenu(false)}
                       aria-hidden="true"
                     />
-                    <div className="absolute right-0 bottom-full mb-2 w-72 bg-[var(--color-panel)] border border-[var(--color-border)] shadow-lg p-3 z-50 text-xs space-y-2">
+                    <div className="script-menu absolute right-0 bottom-full mb-2 w-72 bg-[var(--color-panel)] border border-[var(--color-border)] shadow-lg p-3 z-50 text-xs space-y-2">
                       <p className="font-bold text-[var(--color-text)] text-[10px] pb-1 border-b border-[var(--color-border)]">
                         One-Click Terminal Scripts
                       </p>

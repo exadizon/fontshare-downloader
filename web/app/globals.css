@@ -24,6 +24,10 @@
   --font-body: "General Sans", system-ui, -apple-system, sans-serif;
   --font-display: "Satoshi", "General Sans", system-ui, sans-serif;
   --shadow-bulkbar: 0 -10px 30px rgba(0, 0, 0, 0.4);
+  /* Motion tokens - strong, opinionated curves for UI movement */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 [data-theme="dark"] {
@@ -259,6 +263,134 @@ input[type="range"].fs-range::-moz-range-thumb {
   background: var(--color-muted);
 }
 
+/* Theme swap: one coordinated color crossfade across the whole page. The scope
+   class exists only while a toggle is in flight, so ordinary hover and state
+   transitions keep their own timing. Reduced motion skips the class in JS. */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 250ms ease,
+    border-color 250ms ease,
+    color 250ms ease,
+    fill 250ms ease,
+    stroke 250ms ease !important;
+}
+
+/* The toggle glyph turns as it swaps, acknowledging the click */
+@keyframes iconSwap {
+  from {
+    opacity: 0;
+    transform: rotate(-25deg) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.theme-icon {
+  animation: iconSwap 220ms var(--ease-out) both;
+}
+
+/* ---------------------------------------------------------------------------
+   Motion. Restrained by design: opacity + transform only, on the compositor.
+   Every entrance starts near its resting state (never scale(0)), and exits
+   retrace the path they entered. Overlays carry a data-state flag from the
+   usePresence hook so transitions can run in both directions.
+--------------------------------------------------------------------------- */
+
+/* First-load entrance for statement bands and section headers */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-enter {
+  animation: riseIn 520ms var(--ease-out) both;
+}
+
+.hero-enter-1 { animation-delay: 0ms; }
+.hero-enter-2 { animation-delay: 70ms; }
+.hero-enter-3 { animation-delay: 140ms; }
+.hero-enter-4 { animation-delay: 210ms; }
+
+/* Guide modal: backdrop fades, panel scales out of thin air (center anchored) */
+.guide-backdrop {
+  opacity: 0;
+  transition: opacity 250ms var(--ease-out);
+}
+
+.guide-panel {
+  opacity: 0;
+  transform: scale(0.97);
+  transition:
+    opacity 250ms var(--ease-out),
+    transform 250ms var(--ease-out);
+}
+
+.guide-overlay[data-state="open"] .guide-backdrop {
+  opacity: 1;
+}
+
+.guide-overlay[data-state="open"] .guide-panel {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Specimen drawer: backdrop fades, panel slides in from the right edge */
+.specimen-backdrop {
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out);
+}
+
+.specimen-panel {
+  transform: translateX(100%);
+  transition: transform 420ms var(--ease-drawer);
+}
+
+.specimen-overlay[data-state="open"] .specimen-backdrop {
+  opacity: 1;
+}
+
+.specimen-overlay[data-state="open"] .specimen-panel {
+  transform: translateX(0);
+}
+
+/* Bulk dock: rises from below the viewport when the queue becomes non-empty */
+.bulk-dock {
+  transform: translateY(100%);
+  transition: transform 420ms var(--ease-drawer);
+}
+
+.bulk-dock[data-state="open"] {
+  transform: translateY(0);
+}
+
+/* Scripts menu: small anchored popover, opens upward from its trigger */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.script-menu {
+  transform-origin: bottom right;
+  animation: popIn 180ms var(--ease-out) both;
+}
+
 /* Reduced motion: every animation and transition rests, nothing hides */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -266,6 +398,7 @@ input[type="range"].fs-range::-moz-range-thumb {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
   }

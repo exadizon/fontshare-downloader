@@ -128,17 +128,17 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
       <section className="pt-10 md:pt-14 pb-9 border-b border-[var(--color-border)]">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
           <div className="max-w-3xl min-w-0">
-            <h1 className="font-display font-black text-4xl md:text-6xl lg:text-7xl tracking-tighter leading-[0.95] text-[var(--color-text)]">
+            <h1 className="hero-enter hero-enter-1 font-display font-black text-4xl md:text-6xl lg:text-7xl tracking-tighter leading-[0.95] text-[var(--color-text)]">
               Quality fonts. Free. In bulk.
             </h1>
-            <p className="mt-4 text-sm md:text-base text-[var(--color-muted)] leading-relaxed max-w-xl">
+            <p className="hero-enter hero-enter-2 mt-4 text-sm md:text-base text-[var(--color-muted)] leading-relaxed max-w-xl">
               Every family from the Indian Type Foundry catalog, free for
               commercial use. Select what you need and download the ZIPs in one click.
             </p>
           </div>
 
           {/* Direct 1-Click Catalog Download */}
-          <div className="flex flex-col gap-2.5 lg:items-end shrink-0">
+          <div className="hero-enter hero-enter-3 flex flex-col gap-2.5 lg:items-end shrink-0">
             <button
               type="button"
               onClick={() => downloadAll(fonts.map((f) => f.slug))}
@@ -165,7 +165,7 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
         </div>
 
         {/* Quick batch presets bar */}
-        <div className="mt-9 flex flex-wrap items-center gap-2">
+        <div className="hero-enter hero-enter-4 mt-9 flex flex-wrap items-center gap-2">
           <span className="micro-label text-[var(--color-muted)] mr-2">Quick select</span>
           {quickSelectChips.map((chip) => (
             <button
