@@ -49,19 +49,19 @@ export default function QuickSpecimenDrawer({
   const isSelected = has(font.slug);
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/70 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/70">
       {/* Click backdrop to close */}
       <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
 
       <link rel="stylesheet" href={cssUrl(font, weights)} />
 
-      <aside className="relative w-full max-w-2xl bg-[var(--color-card)] border-l border-[var(--color-border)] h-full flex flex-col shadow-2xl z-10 overflow-hidden">
+      <aside className="relative w-full max-w-2xl bg-[var(--color-card)] border-l border-[var(--color-border)] h-full flex flex-col shadow-lg z-10 overflow-hidden">
         {/* Top bar */}
         <div className="p-5 border-b border-[var(--color-border)] flex items-center justify-between bg-[var(--color-panel)] shrink-0">
           <div className="flex items-center gap-3">
-            <span className="badge-solid">SPECIMEN</span>
+            <span className="badge-solid">Specimen</span>
             <span className="micro-label text-[var(--color-muted)]">
-              {font.category} &middot; {font.styles.length} STYLES
+              {font.category} · {font.styles.length} STYLES
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -69,7 +69,7 @@ export default function QuickSpecimenDrawer({
               href={`/${font.slug}`}
               className="text-xs text-[var(--color-muted)] hover:text-[var(--color-text)] underline underline-offset-4"
             >
-              Full Page &rarr;
+              Full page
             </Link>
             <button
               type="button"
@@ -103,20 +103,24 @@ export default function QuickSpecimenDrawer({
               {font.name}
             </h2>
             <div className="flex flex-wrap items-center gap-2 mt-3 text-xs text-[var(--color-muted)]">
-              <span>Designed by <strong className="text-[var(--color-text)]">{font.designers.join(", ") || "Unknown"}</strong></span>
-              <span>&middot;</span>
-              <span>License: <strong className="text-[var(--color-text)]">{licenseLabel(font.license)}</strong></span>
+              <span>
+                Designed by{" "}
+                <strong className="text-[var(--color-text)]">{font.designers.join(", ") || "Unknown"}</strong>
+              </span>
+              <span>·</span>
+              <span>
+                License:{" "}
+                <strong className="text-[var(--color-text)]">{licenseLabel(font.license)}</strong>
+              </span>
               {isVariable(font) && (
-                <>
-                  <span>&middot;</span>
-                  <span className="text-[var(--color-text)] font-semibold border border-[var(--color-border)] px-1.5 py-0.5 rounded-sm">Variable Font</span>
-                </>
+                <span className="text-[var(--color-text)] font-semibold border border-[var(--color-border)] px-1.5 py-0.5 rounded-sm">
+                  Variable
+                </span>
               )}
               {hasItalic(font) && (
-                <>
-                  <span>&middot;</span>
-                  <span>Includes Italics</span>
-                </>
+                <span className="border border-[var(--color-border)] px-1.5 py-0.5 rounded-sm">
+                  Italics
+                </span>
               )}
             </div>
           </div>
@@ -126,7 +130,7 @@ export default function QuickSpecimenDrawer({
             <button
               type="button"
               onClick={() => toggle(font.slug)}
-              className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              className={`flex-1 py-2.5 px-4 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer ${
                 isSelected
                   ? "bg-[var(--color-text)] text-[var(--color-bg)]"
                   : "btn-solid"
@@ -137,7 +141,7 @@ export default function QuickSpecimenDrawer({
             <a
               href={downloadUrl(font.slug)}
               download={`${font.slug}.zip`}
-              className="btn-outline py-2.5 px-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-outline py-2.5 px-4 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg
                 width="16"
@@ -147,6 +151,7 @@ export default function QuickSpecimenDrawer({
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
@@ -185,7 +190,7 @@ export default function QuickSpecimenDrawer({
                   key={w}
                   type="button"
                   onClick={() => setCustomWeight(w)}
-                  className={`text-xs px-2 py-0.5 border transition-all cursor-pointer ${
+                  className={`text-xs px-2 py-0.5 border transition-colors cursor-pointer ${
                     selectedWeight === w
                       ? "border-[var(--color-text)] bg-[var(--color-text)] text-[var(--color-bg)] font-semibold"
                       : "border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-text)]"
@@ -263,7 +268,7 @@ export default function QuickSpecimenDrawer({
                 rel="noreferrer"
                 className="text-[var(--color-text)] underline underline-offset-4 hover:opacity-80"
               >
-                fontshare.com/fonts/{font.slug} &rarr;
+                fontshare.com/fonts/{font.slug}
               </a>
             </p>
           </div>

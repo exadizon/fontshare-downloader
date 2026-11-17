@@ -70,23 +70,27 @@ export default async function FontPage({
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-2 text-xs text-[var(--color-muted)]">
-              <span>By <strong className="text-[var(--color-text)]">{font.designers.join(", ") || "Unknown"}</strong></span>
-              <span>&middot;</span>
-              <span>{weights.length} weights ({font.styles.length} styles)</span>
+              <span>
+                By{" "}
+                <strong className="text-[var(--color-text)]">{font.designers.join(", ") || "Unknown"}</strong>
+              </span>
+              <span>·</span>
+              <span>
+                {weights.length} weights ({font.styles.length} styles)
+              </span>
               {isVariable(font) && (
-                <>
-                  <span>&middot;</span>
-                  <span className="text-[var(--color-text)] font-semibold border border-[var(--color-border)] px-1.5 py-0.5 rounded-sm">Variable Font</span>
-                </>
+                <span className="text-[var(--color-text)] font-semibold border border-[var(--color-border)] px-1.5 py-0.5 rounded-sm">
+                  Variable
+                </span>
               )}
               {hasItalic(font) && (
-                <>
-                  <span>&middot;</span>
-                  <span>Includes Italics</span>
-                </>
+                <span className="border border-[var(--color-border)] px-1.5 py-0.5 rounded-sm">
+                  Italics
+                </span>
               )}
-              <span>&middot;</span>
-              <span>{licenseLabel(font.license)}</span>
+              <span className="border border-[var(--color-border)] px-1.5 py-0.5 rounded-sm">
+                {licenseLabel(font.license)}
+              </span>
             </div>
 
             <h1
@@ -184,7 +188,7 @@ export default async function FontPage({
                 className="text-[var(--color-text)] font-semibold underline underline-offset-4 inline-flex items-center gap-1 hover:opacity-80"
               >
                 <span>View on Fontshare Official</span>
-                <span>&nearr;</span>
+                <span>↗</span>
               </a>
             </div>
           </div>

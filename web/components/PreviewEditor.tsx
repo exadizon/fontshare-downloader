@@ -41,7 +41,7 @@ export default function PreviewEditor({ font }: { font: CatalogFont }) {
             type="button"
             onClick={() => setIsItalic((v) => !v)}
             aria-pressed={isItalic}
-            className={`text-xs px-4 py-2.5 border transition-all uppercase font-semibold tracking-wider cursor-pointer ${
+            className={`text-xs px-4 py-2.5 border transition-colors font-semibold cursor-pointer ${
               isItalic
                 ? "bg-[var(--color-text)] text-[var(--color-bg)] border-[var(--color-border)]"
                 : "border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-text)]"

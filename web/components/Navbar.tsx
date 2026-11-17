@@ -22,7 +22,7 @@ export default function Navbar() {
               <span className="font-display font-black text-2xl sm:text-3xl tracking-tight text-[var(--color-text)]">
                 Fontshare&trade;
               </span>
-              <span className="badge-solid text-[9px] tracking-widest font-black ml-1">
+              <span className="badge-solid text-[9px] font-black ml-1">
                 BULK
               </span>
             </Link>
@@ -50,18 +50,18 @@ export default function Navbar() {
               </span>
             </a>
 
-            {/* CLI Guide Trigger Cell */}
+            {/* Guide Trigger Cell */}
             <button
               type="button"
               onClick={() => setCliModalOpen(true)}
               className="flex flex-col justify-between p-3 sm:px-5 sm:py-2.5 hover:bg-[var(--color-panel)] transition-colors text-[var(--color-text)] cursor-pointer min-w-24 sm:min-w-28 text-left"
-              title="Interactive CLI guide: bulk download, selective filters, & OS auto-installer"
+              title="How to use this site, the Python CLI, the OS installer, and shell script exports"
             >
-              <span className="text-xs font-bold flex items-center gap-1.5">
+              <span className="text-xs font-bold flex items-center gap-1.5 whitespace-nowrap">
                 <span className="font-mono">&gt;_</span>
-                <span>CLI Guide</span>
+                <span>Guide</span>
               </span>
-              <span className="font-mono text-[11px] text-[var(--color-muted)]">Python / OS</span>
+              <span className="font-mono text-[11px] text-[var(--color-muted)] hidden sm:inline whitespace-nowrap">Web · CLI</span>
             </button>
 
             {/* Queue Counter Cell */}
