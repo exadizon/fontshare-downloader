@@ -8,18 +8,17 @@ ZIP, and extracts it immediately into ``downloads/fonts/<slug>/``.
 import asyncio
 import json
 import logging
-import os
-import shutil
 import sys
 import time
-import zipfile
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from typing import Dict, List, Optional
 from urllib.parse import quote
 
 import aiohttp
 import click
 from tqdm.asyncio import tqdm
+
+from archive import extract_family_zip
 
 API_BASE = "https://api.fontshare.com/v2"
 USER_AGENT = "fontshare-downloader/2.0"
@@ -50,6 +49,7 @@ class FontshareDownloader:
         max_concurrent: int = 3,
         install_after_download: bool = False,
         install_scope: str = "user",
+        install_variants: str = "all",
         verbose: bool = False,
     ):
         self.output_dir = Path(output_dir)
@@ -57,6 +57,7 @@ class FontshareDownloader:
         self.max_concurrent = max_concurrent
         self.install_after_download = install_after_download
         self.install_scope = install_scope
+        self.install_variants = install_variants
         self.verbose = verbose
         self.max_retries = 3
 
@@ -169,51 +170,8 @@ class FontshareDownloader:
         )
 
     def _extract_archive(self, zip_path: Path, font_dir: Path) -> None:
-        """Extract a family ZIP, guarding against zip-slip entries."""
-        staging = font_dir.parent / f".{font_dir.name}.extracting"
-        if staging.exists():
-            shutil.rmtree(staging)
-        staging.mkdir(parents=True, exist_ok=True)
-        try:
-            with zipfile.ZipFile(zip_path) as zf:
-                members = []
-                for info in zf.infolist():
-                    if info.is_dir():
-                        continue
-                    parts = [
-                        p
-                        for p in PurePosixPath(info.filename).parts
-                        if p not in ("", ".")
-                    ]
-                    if not parts or ".." in parts:
-                        continue
-                    members.append((info, parts))
-                if not members:
-                    raise ValueError("archive contained no files")
-                root = members[0][1][0]
-                strip_root = all(
-                    len(p) > 1 and p[0] == root for _, p in members
-                )
-                count = 0
-                for info, parts in members:
-                    rel = parts[1:] if strip_root else parts
-                    if len(rel) > 1 and rel[0].lower() == "fonts":
-                        rel = rel[1:]
-                    if not rel:
-                        continue
-                    dest = staging.joinpath(*rel)
-                    dest.parent.mkdir(parents=True, exist_ok=True)
-                    with zf.open(info) as src, open(dest, "wb") as dst:
-                        shutil.copyfileobj(src, dst)
-                    count += 1
-                if count == 0:
-                    raise ValueError("archive contained no extractable files")
-            if font_dir.exists():
-                shutil.rmtree(font_dir)
-            os.replace(staging, font_dir)
-        except Exception:
-            shutil.rmtree(staging, ignore_errors=True)
-            raise
+        """Extract a family ZIP into ``font_dir`` (shared with the importer)."""
+        extract_family_zip(zip_path, font_dir)
 
     async def _retry_wait(self, slug: str, attempt: int) -> None:
         delay = min(2 ** (attempt - 1), 8)
@@ -342,6 +300,7 @@ class FontshareDownloader:
             install_stats = FontInstaller(
                 fonts_dir=str(self.fonts_dir),
                 scope=self.install_scope,
+                variants=self.install_variants,
                 verbose=self.verbose,
             ).install_all_fonts()
 
@@ -373,8 +332,15 @@ class FontshareDownloader:
     default="user",
     show_default=True,
 )
+@click.option(
+    "--install-variants",
+    type=click.Choice(["all", "static", "variable"], case_sensitive=False),
+    default="all",
+    show_default=True,
+    help="Which desktop styles to install",
+)
 @click.option("--verbose", "-v", is_flag=True)
-def main(output_dir, rate_limit, max_concurrent, install, install_scope, verbose):
+def main(output_dir, rate_limit, max_concurrent, install, install_scope, install_variants, verbose):
     """Download all Fontshare font families."""
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
@@ -390,6 +356,7 @@ def main(output_dir, rate_limit, max_concurrent, install, install_scope, verbose
         max_concurrent=max_concurrent,
         install_after_download=install,
         install_scope=install_scope,
+        install_variants=install_variants,
         verbose=verbose,
     )
     try:

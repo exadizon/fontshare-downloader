@@ -27,8 +27,26 @@ python cli/install.py --fonts-dir ./downloads/fonts --scope system
 ```
 
 Options: `--output-dir`, `--rate-limit` (default 1.0s, be respectful),
-`--max-concurrent` (default 3), `--verbose`. Run `python cli/download.py --help`
-for details.
+`--max-concurrent` (default 3), `--install-variants`, `--verbose`. Run
+`python cli/download.py --help` for details.
+
+### Already downloaded ZIPs in your browser?
+
+Fontshare's site has no full-catalog download, so browser downloads are one
+ZIP per family (`Author_Complete.zip`, `Satoshi_Complete.zip`, ...). Point the
+importer at whatever folder they landed in - it matches each ZIP to its
+catalog family, extracts it, and installs in one go. Standard library only, so
+no `pip install` is needed:
+
+```bash
+python cli/import_zips.py --install                 # uses your ~/Downloads
+python cli/import_zips.py --source ~/Downloads --install
+python cli/import_zips.py --source ./zips --dry-run # preview, no writing
+```
+
+It is idempotent: families already on disk are skipped (`--force` re-extracts),
+and archives without font files are ignored.
+
 
 ### Web UI
 
