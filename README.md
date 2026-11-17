@@ -143,7 +143,11 @@ or sponsored by Fontshare or Indian Type Foundry.
 See `CONTRIBUTING.md`. Bug reports are most useful with a single family slug,
 the log from `downloads/logs/download.log`, and your OS.
 
-## Roadmap
+## Live demo
+
+https://web-adiluexe.vercel.app
+
+
 
 - [x] Canonical CLI with live discovery, extraction, installer
 - [x] Browser ZIP importer with catalog slug matching
