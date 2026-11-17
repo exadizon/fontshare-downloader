@@ -22,3 +22,4 @@ web/.vercel/
 Thumbs.db
 .vscode/
 *.log
+.vercel

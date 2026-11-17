@@ -155,4 +155,3 @@ https://fontshare-bulk-downloader.vercel.app
 - [x] Web UI catalog grid, family detail pages, bulk queue
 - [ ] Vercel deploy and demo assets
 - [ ] Update detection (download only families new since last sync)
-# 
