@@ -145,7 +145,7 @@ the log from `downloads/logs/download.log`, and your OS.
 
 ## Live demo
 
-https://web-adiluexe.vercel.app
+https://fontshare-bulk-downloader.vercel.app
 
 
 
