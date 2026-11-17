@@ -26,7 +26,7 @@ designers, tags, styles/weights, variable axes, OpenType features, license
 ## Repo layout
 
 ```
-AGENTS.md / CLAUDE.md / README.md / prd.md
+AGENTS.md / CLAUDE.md / README.md / LICENSE / CONTRIBUTING.md
 cli/
   download.py        # canonical downloader (live catalog, extract, retry)
   install.py         # canonical installer (user|system scope, Win/macOS/Linux)
@@ -39,8 +39,13 @@ data/
 scripts/
   sync_catalog.py    # regenerates data/ from the live API
   archive/           # retired legacy scripts (pre-clean-break era)
-web/                 # Next.js App Router UI (see web/AGENTS.md if present)
-docs/demo/           # screenshots, demo GIF
+tests/
+  test_archive.py    # extraction + zip-slip tests
+  test_import_zips.py # slug matching tests
+web/                 # Next.js App Router UI
+docs/
+  ARCHITECTURE.md    # discovery/download/install design
+  demo/              # screenshots, demo GIF
 downloads/           # runtime output, NEVER committed (gitignored)
 ```
 

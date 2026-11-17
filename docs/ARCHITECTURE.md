@@ -1,4 +1,4 @@
-# Fontshare Downloader - Product Requirements Document
+# Fontshare Downloader - Architecture and design
 
 ## Problem
 
