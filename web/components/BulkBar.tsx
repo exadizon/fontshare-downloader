@@ -38,13 +38,13 @@ export default function BulkBar() {
   };
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-40 bg-[var(--color-card)] border-t border-[var(--color-border)] shadow-[0_-10px_30px_rgba(0,0,0,0.4)]">
-      {/* Active Download Progress Bar */}
+    <div className="fixed bottom-0 inset-x-0 z-40 bg-[var(--color-card)] border-t border-[var(--color-border)] shadow-bulkbar">
+      {/* Active Download Progress Bar (transform, never width) */}
       {isDownloading && downloadProgress && (
         <div className="w-full bg-[var(--color-panel)] h-1.5 overflow-hidden">
           <div
-            className="h-full bg-[var(--color-text)] transition-all duration-300"
-            style={{ width: `${downloadProgress.percent}%` }}
+            className="h-full w-full bg-[var(--color-text)] origin-left transition-transform duration-300"
+            style={{ transform: `scaleX(${downloadProgress.percent / 100})` }}
           />
         </div>
       )}
@@ -63,7 +63,7 @@ export default function BulkBar() {
                   <span className="badge-solid text-[10px]">{downloadProgress.percent}%</span>
                 </div>
                 <p className="text-xs text-[var(--color-muted)] truncate">
-                  Triggered: <strong className="text-[var(--color-text)]">{downloadProgress.currentSlug}.zip</strong> &middot; Please click &quot;Allow&quot; if your browser prompts for multiple files.
+                  Triggered: <strong className="text-[var(--color-text)]">{downloadProgress.currentSlug}.zip</strong> · Please click &quot;Allow&quot; if your browser prompts for multiple files.
                 </p>
               </div>
             </div>
@@ -71,7 +71,7 @@ export default function BulkBar() {
             <button
               type="button"
               onClick={cancelDownload}
-              className="btn-outline px-4 py-1.5 text-xs uppercase tracking-wider font-bold text-red-500 border-red-500/30 hover:border-red-500 cursor-pointer"
+              className="btn-outline px-4 py-1.5 text-xs font-bold text-red-500 border-red-500/30 hover:border-red-500 cursor-pointer"
             >
               Cancel Remaining
             </button>
@@ -126,7 +126,7 @@ export default function BulkBar() {
                 <button
                   type="button"
                   onClick={() => setShowExportMenu((v) => !v)}
-                  className="btn-outline px-3 py-2 text-xs uppercase tracking-wider font-semibold flex items-center gap-1.5 cursor-pointer"
+                  className="btn-outline px-3 py-2 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
                   aria-expanded={showExportMenu}
                 >
                   <span>Scripts / Terminal</span>
@@ -140,8 +140,8 @@ export default function BulkBar() {
                       onClick={() => setShowExportMenu(false)}
                       aria-hidden="true"
                     />
-                    <div className="absolute right-0 bottom-full mb-2 w-72 bg-[var(--color-panel)] border border-[var(--color-border)] shadow-2xl p-3 z-50 text-xs space-y-2">
-                      <p className="font-bold text-[var(--color-text)] uppercase tracking-wider text-[10px] pb-1 border-b border-[var(--color-border)]">
+                    <div className="absolute right-0 bottom-full mb-2 w-72 bg-[var(--color-panel)] border border-[var(--color-border)] shadow-lg p-3 z-50 text-xs space-y-2">
+                      <p className="font-bold text-[var(--color-text)] text-[10px] pb-1 border-b border-[var(--color-border)]">
                         One-Click Terminal Scripts
                       </p>
 
@@ -158,7 +158,7 @@ export default function BulkBar() {
                             <strong className="text-[var(--color-text)] block">Windows Script (.bat)</strong>
                             <span className="text-[11px] text-[var(--color-muted)]">Runs curl loop in cmd.exe</span>
                           </div>
-                          <span className="text-xs">&darr;</span>
+                          <span className="text-xs">↓</span>
                         </button>
 
                         <button
@@ -173,7 +173,7 @@ export default function BulkBar() {
                             <strong className="text-[var(--color-text)] block">PowerShell (.ps1)</strong>
                             <span className="text-[11px] text-[var(--color-muted)]">Windows PowerShell native</span>
                           </div>
-                          <span className="text-xs">&darr;</span>
+                          <span className="text-xs">↓</span>
                         </button>
 
                         <button
@@ -188,7 +188,7 @@ export default function BulkBar() {
                             <strong className="text-[var(--color-text)] block">macOS / Linux (.sh)</strong>
                             <span className="text-[11px] text-[var(--color-muted)]">Bash script with curl</span>
                           </div>
-                          <span className="text-xs">&darr;</span>
+                          <span className="text-xs">↓</span>
                         </button>
                       </div>
 
@@ -219,7 +219,7 @@ export default function BulkBar() {
               <button
                 type="button"
                 onClick={() => downloadAll()}
-                className="btn-solid px-5 py-2.5 text-xs uppercase tracking-wider font-extrabold flex items-center gap-2 cursor-pointer shadow-md"
+                className="btn-solid px-5 py-2.5 text-xs font-extrabold flex items-center gap-2 cursor-pointer shadow-md"
               >
                 <svg
                   width="16"
@@ -229,6 +229,7 @@ export default function BulkBar() {
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>

@@ -1,4 +1,4 @@
-# Fontshare Downloader - Product Requirements Document
+# Fontshare Downloader - Architecture and design
 
 ## Problem
 
@@ -10,7 +10,7 @@ adds a clean browser UI for previewing and picking fonts.
 
 Two parts sharing one generated catalog (`data/fonts.json`, 100 families):
 
-1. **Python CLI** (`cli/download.py`, `cli/install.py`)
+1. **Python CLI** (`cli/download.py`, `cli/install.py`, `cli/import_zips.py`)
    - Live discovery: `GET https://api.fontshare.com/v2/fonts`
      (`offset`/`limit` pagination, `has_more` loop), fallback to
      `data/fonts.min.json`, then a minimal hardcoded list.
@@ -20,7 +20,10 @@ Two parts sharing one generated catalog (`data/fonts.json`, 100 families):
      extraction into `downloads/fonts/<slug>/`.
    - Install: cross-platform (Windows registry + GDI refresh, macOS
      `Library/Fonts`, Linux fontconfig), `--scope user|system`, skips
-     web-only assets.
+     web-only assets, `--variants all|static|variable`.
+   - Import: `cli/import_zips.py` ingests browser-downloaded family ZIPs
+     (stdlib only), matching each archive to its catalog slug by filename,
+     archive folder, or font stems, then optionally installs.
 2. **Web UI** (`web/`, Next.js + TypeScript + Tailwind)
    - Static catalog browser copying Fontshare aesthetics: paper background,
      ink text, grotesk display type, minimal grid.
@@ -34,6 +37,7 @@ Two parts sharing one generated catalog (`data/fonts.json`, 100 families):
 ## Status
 
 - [x] Canonical CLI with live discovery, extraction, installer
+- [x] Browser ZIP importer with catalog slug matching (`cli/import_zips.py`)
 - [x] Catalog sync script + generated 100-family data with rich metadata
 - [x] Legacy scripts archived, binaries untracked, docs refreshed
 - [x] Web UI catalog grid, family detail pages, bulk queue (verified:

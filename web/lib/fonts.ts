@@ -82,10 +82,21 @@ export function batchCssUrl(fonts: CatalogFont[]): string {
   return `${CSS_API}?${parts.join("&")}&display=swap`;
 }
 
+/** Weight whose number is closest to 400 - the natural specimen weight. */
+export function displayWeightOf(font: CatalogFont): number {
+  const weights = weightsOf(font);
+  if (weights.includes(400)) return 400;
+  return weights.reduce((best, w) =>
+    Math.abs(w - 400) < Math.abs(best - 400) ? w : best
+  , weights[0] ?? 400);
+}
+
 function defaultWeights(font: CatalogFont): number[] {
   const weights = weightsOf(font);
-  if (weights.length <= 3) return weights;
-  return [weights[0], weights[Math.floor(weights.length / 2)], weights[weights.length - 1]];
+  const display = displayWeightOf(font);
+  const picks = new Set<number>([display, weights[0], weights[weights.length - 1]]);
+  if (weights.length > 2) picks.add(weights[Math.floor(weights.length / 2)]);
+  return [...picks].sort((a, b) => a - b);
 }
 
 export function downloadUrl(slug: string): string {

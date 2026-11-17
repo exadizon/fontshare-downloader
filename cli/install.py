@@ -23,10 +23,12 @@ class FontInstaller:
         self,
         fonts_dir: str = "./downloads/fonts",
         scope: str = "user",
+        variants: str = "all",
         verbose: bool = False,
     ):
         self.fonts_dir = Path(fonts_dir)
         self.scope = scope
+        self.variants = variants
         self.verbose = verbose
         self.os_type = platform.system().lower()
         logging.basicConfig(
@@ -108,6 +110,12 @@ class FontInstaller:
             detail = exc.stderr.strip() or exc.stdout.strip() or str(exc)
             self.logger.warning("fc-cache failed: %s", detail)
 
+    def _matches_variants(self, path: Path) -> bool:
+        if self.variants == "all":
+            return True
+        is_variable = "variable" in path.name.lower()
+        return is_variable if self.variants == "variable" else not is_variable
+
     def find_font_files(self) -> List[Path]:
         if not self.fonts_dir.exists():
             return []
@@ -116,6 +124,8 @@ class FontInstaller:
             if not path.is_file() or path.suffix.lower() not in INSTALLABLE_EXTENSIONS:
                 continue
             if any(part.lower() == "web" for part in path.parts):
+                continue
+            if not self._matches_variants(path):
                 continue
             files.append(path)
         return sorted(files)
@@ -148,7 +158,7 @@ class FontInstaller:
         if not files:
             self.logger.warning("No font files found in %s", self.fonts_dir)
             return stats
-        self.logger.info("Found %d installable files in %s", len(files), self.target_dir)
+        self.logger.info("Found %d installable files in %s", len(files), self.fonts_dir)
         for path in files:
             stats[self.install_font(path)] += 1
         if self.os_type == "windows":
@@ -160,7 +170,7 @@ class FontInstaller:
     def run(self) -> int:
         print("Fontshare Font Installer")
         print("=" * 40)
-        print(f"OS: {platform.system()} | Scope: {self.scope}")
+        print(f"OS: {platform.system()} | Scope: {self.scope} | Variants: {self.variants}")
         print(f"Source: {self.fonts_dir}")
         print(f"Target: {self.target_dir}")
         print()
@@ -197,9 +207,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Install extracted Fontshare fonts")
     parser.add_argument("--fonts-dir", default="./downloads/fonts")
     parser.add_argument("--scope", choices=("user", "system"), default="user")
+    parser.add_argument(
+        "--variants",
+        choices=("all", "static", "variable"),
+        default="all",
+        help="which desktop styles to install (default: all)",
+    )
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
-    raise SystemExit(FontInstaller(args.fonts_dir, args.scope, args.verbose).run())
+    raise SystemExit(
+        FontInstaller(args.fonts_dir, args.scope, args.variants, args.verbose).run()
+    )
 
 
 if __name__ == "__main__":

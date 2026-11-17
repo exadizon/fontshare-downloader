@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Side-by-side before and after screenshots of the Fontshare Bulk Downloader landing page redesign, including the font preview fix.">
+<title>Before / After: Fontshare Bulk Downloader redesign</title>
+<style>
+  /* Hallmark v2.0.0 · before-after comparison · genre editorial · theme: fontshare parchment (project's own system) */
+  /* critique: pending - documented comparison page, screenshots by capture script */
+  :root {
+    --bg: #FFFFE3;
+    --ink: #111111;
+    --muted: #666655;
+    --border: #E0E0BC;
+    --panel: #F4F4D4;
+    --paper: #FFFFF9;
+    --font-body: "General Sans", system-ui, -apple-system, sans-serif;
+    --font-display: "Satoshi", "General Sans", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    overflow-x: clip;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    text-wrap: balance;
+    margin: 0 0 12px;
+  }
+  .lede { color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 60ch; margin: 0; }
+  .facts {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 48px;
+  }
+  .fact {
+    border: 1px solid var(--border);
+    background: var(--panel);
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+  .fact strong { font-variant-numeric: tabular-nums; }
+  section { margin-bottom: 56px; }
+  h2 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 8px;
+  }
+  .why { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0 0 16px; max-width: 70ch; }
+  .pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 860px) {
+    .pair { grid-template-columns: minmax(0, 1fr); }
+  }
+  figure { margin: 0; min-width: 0; }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+    background: var(--ink);
+    color: var(--bg);
+  }
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    background: var(--paper);
+  }
+  .pair.mono { grid-template-columns: minmax(0, 1fr); max-width: 720px; }
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Before / After</h1>
+  <p class="lede">
+    The bulk downloader restyled against fontshare.com itself: hairline parchment UI, quiet
+    control rows, and full-width specimen cards with the family name set huge in its own
+    typeface. Plus the fix for the bug where every preview rendered in the same body font.
+  </p>
+  <div class="facts">
+    <span class="fact">Font previews fixed: <strong>1 &rarr; 101</strong> stylesheet loads</span>
+    <span class="fact">Specimen size: <strong>32px &rarr; 88px default</strong>, user control from 32 to 140px</span>
+    <span class="fact">All wiring kept: bulk queue, filters, CLI scripts, drawer</span>
+    <span class="fact">Shots taken at <strong>1440&times;900</strong> and <strong>390&times;844</strong>, same script both sides</span>
+  </div>
+
+  <section>
+    <h2>1 &middot; First screen</h2>
+    <p class="why">
+      The black “command deck” hero is gone. The intro is a quiet statement band in the
+      Fontshare manner: big display headline, one sentence, one action, then quick-select
+      chips on a hairline. The download stays the most prominent element on the page.
+    </p>
+    <div class="pair">
+      <figure class="before"><span class="tag">Before</span><img src="before-hero.png" alt="Before: dark hero deck with uppercase title and boxed filters" fetchpriority="high"></figure>
+      <figure class="after"><span class="tag">After</span><img src="after-hero.png" alt="After: quiet statement band with big display headline and hairline control rows" fetchpriority="high"></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>2 &middot; The bug: font previews</h2>
+    <p class="why">
+      Before, every specimen rendered in the same body font: the lazy loader observed a
+      <code>display:none</code> sentinel, which an IntersectionObserver never reports as
+      intersecting, so the per-family stylesheet never loaded. After the fix each card
+      loads its family (101 CSS requests) and sets its name in its own typeface.
+    </p>
+    <div class="pair">
+      <figure class="before"><span class="tag">Before, one font everywhere</span><img src="before-list.png" alt="Before: Tanker, Sentient, Zodiak, Bespoke Serif and Telma all render in the same generic sans" loading="lazy"></figure>
+      <figure class="after"><span class="tag">After, each family in its own face</span><img src="after-list.png" alt="After: Cabinet Grotesk, Switzer and Chillax each render in their own typeface at specimen scale" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>3 &middot; Grid view</h2>
+    <p class="why">
+      Same catalog, same wiring; cards now carry the giant specimen, quieter meta rows,
+      a 2px hover lift and keyboard focus rings.
+    </p>
+    <div class="pair">
+      <figure class="before"><span class="tag">Before</span><img src="before-grid.png" alt="Before: grid cards with small centered specimens" loading="lazy"></figure>
+      <figure class="after"><span class="tag">After</span><img src="after-grid.png" alt="After: grid cards with giant specimens and quieter meta" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>4 &middot; Mobile, 390px</h2>
+    <div class="pair">
+      <figure class="before"><span class="tag">Before</span><img src="before-mobile.png" alt="Before: mobile view with wrapped nav cells" loading="lazy"></figure>
+      <figure class="after"><span class="tag">After</span><img src="after-mobile.png" alt="After: mobile view with unwrapped nav cells" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <section class="mono">
+    <h2>5 &middot; Also in this pass</h2>
+    <p class="why">
+      Dark mode tokens unchanged, verified. The inspect drawer still works and now loads its
+      family reliably. Footer links had raw <code>&amp;nearr;</code> entities rendering as
+      literal text; replaced with real arrow glyphs everywhere.
+    </p>
+    <figure class="after"><span class="tag">Dark mode</span><img src="after-dark.png" alt="Dark mode of the redesigned page" loading="lazy"></figure>
+    <figure class="after"><span class="tag">Inspect drawer</span><img src="after-drawer.png" alt="Quick specimen drawer showing Satoshi in its own face" loading="lazy"></figure>
+  </section>
+
+  <section class="mono">
+    <h2>6 &middot; The guide, rewritten against the real CLI</h2>
+    <p class="why">
+      The old CLI guide documented flags that do not exist (<code>--category</code>,
+      <code>--variable-only</code>, <code>--top-only</code>, <code>--slug</code>), a
+      <code>downloads/zips/</code> folder the script never creates, and a
+      &ldquo;zero dependencies&rdquo; claim while it imports aiohttp. The guide is now
+      accurate: a web-UI walkthrough first (including the new stdlib-only{" "}
+      <code>cli/import_zips.py</code> that turns browser-downloaded ZIPs into the same
+      font library, with <code>--install</code>), then the real CLI commands
+      (<code>pip install -r cli/requirements.txt</code>, <code>python cli/download.py</code>,
+      the real flags table), the installer tab, and the shell-script export tab.
+    </p>
+    <div class="pair">
+      <figure class="after"><span class="tag">Guide, using this site</span><img src="after-guide-site.png" alt="Guide modal: web UI walkthrough tab" loading="lazy"></figure>
+      <figure class="after"><span class="tag">Guide, CLI quick start</span><img src="after-guide-cli.png" alt="Guide modal: real CLI quick start commands" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <footer>
+    Screenshots: docs/demo/compare/ &middot; Design reference: fontshare.com &middot; This tool is unaffiliated; all fonts and licenses belong to the Indian Type Foundry.
+  </footer>
+</div>
+</body>
+</html>

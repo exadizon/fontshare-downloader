@@ -1,3 +1,5 @@
+/* Hallmark v2.0.0 · fontshare bulk downloader · genre modern-minimal · theme: fontshare parchment (project's own system) */
+/* critique: pending · waive 64: mono is the material - terminal tool, file formats and counts */
 @import "tailwindcss";
 
 /* Authentic Fontshare Parchment & Charcoal Design System
@@ -19,6 +21,9 @@
   --color-parchment-deep: #ECECBF;
   --color-accent: #111111;
   --color-accent-text: #FEFEE2;
+  --font-body: "General Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Satoshi", "General Sans", system-ui, sans-serif;
+  --shadow-bulkbar: 0 -10px 30px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="dark"] {
@@ -38,11 +43,20 @@
   --color-accent: #FEFEE2;
   --color-accent-text: #111111;
 }
+html,
+body {
+  overflow-x: clip;
+}
 
 html {
   background-color: var(--color-bg);
   color: var(--color-text);
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
 }
 
 [data-theme="dark"] {
@@ -56,7 +70,7 @@ html {
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: "General Sans", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -67,7 +81,7 @@ svg {
 }
 
 .font-display {
-  font-family: "Satoshi", "General Sans", system-ui, sans-serif;
+  font-family: var(--font-display);
 }
 
 /* Hairline wireframe borders */
@@ -96,11 +110,9 @@ svg {
   border-left: 1px solid var(--color-border);
 }
 
-/* Micro uppercase fontshare labels */
+/* Micro fontshare labels - sentence case, untracked, the body face a step smaller */
 .micro-label {
   font-size: 0.6875rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
   font-weight: 600;
 }
 
@@ -112,7 +124,8 @@ svg {
   color: var(--color-bg);
   font-weight: 700;
   border: 1px solid var(--color-text);
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease;
 }
 
 .btn-solid:hover,
@@ -136,13 +149,19 @@ svg {
   transform: none;
 }
 
+/* Bulk bar depth, from the token block */
+.shadow-bulkbar {
+  box-shadow: var(--shadow-bulkbar);
+}
+
 /* Wireframe Outline Button */
 .btn-outline {
   border: 1px solid var(--color-border);
   color: var(--color-text);
   background-color: var(--color-card);
   font-weight: 600;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease, transform 0.15s ease;
 }
 
 .btn-outline:hover {
@@ -162,8 +181,6 @@ svg {
   color: var(--color-bg);
   font-size: 0.625rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   padding: 0.15rem 0.45rem;
   border-radius: 2px;
 }
@@ -240,4 +257,16 @@ input[type="range"].fs-range::-moz-range-thumb {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-muted);
+}
+
+/* Reduced motion: every animation and transition rests, nothing hides */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }

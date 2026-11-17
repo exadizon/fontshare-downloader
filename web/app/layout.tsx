@@ -36,20 +36,20 @@ export default function RootLayout({
             <div className="mx-auto max-w-7xl px-5 py-10 flex flex-col md:flex-row gap-6 md:items-center justify-between text-xs text-[var(--color-muted)]">
               <div>
                 <p className="font-semibold text-[var(--color-text)] mb-1">
-                  FONTSHARE BULK DOWNLOADER
+                  Fontshare Bulk Downloader
                 </p>
                 <p>
                   Free quality fonts released by the Indian Type Foundry (ITF). Each font retains its original license (ITF FFL or SIL OFL).
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-5 text-[11px] uppercase tracking-wider font-mono">
+              <div className="flex flex-wrap items-center gap-5 text-[11px]">
                 <a
                   href="https://www.fontshare.com"
                   target="_blank"
                   rel="noreferrer"
                   className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
                 >
-                  Fontshare Official &nearr;
+                  Fontshare Official
                 </a>
                 <a
                   href="https://www.fontshare.com/licenses"
@@ -57,7 +57,7 @@ export default function RootLayout({
                   rel="noreferrer"
                   className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
                 >
-                  License Terms &nearr;
+                  License Terms
                 </a>
                 <a
                   href="https://github.com/exadizon/fontshare-downloader"
@@ -65,7 +65,7 @@ export default function RootLayout({
                   rel="noreferrer"
                   className="hover:text-[var(--color-text)] hover:underline underline-offset-4"
                 >
-                  GitHub Repository &nearr;
+                  GitHub Repository
                 </a>
               </div>
             </div>

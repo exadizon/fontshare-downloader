@@ -5,13 +5,13 @@ import {
   CATEGORIES,
   categoriesOf,
   cssUrl,
+  displayWeightOf,
   downloadUrl,
   hasItalic,
   isVariable,
   licenseLabel,
   sortFonts,
   SORTS,
-  weightsOf,
   type CatalogFont,
   type SortKey,
 } from "../lib/fonts";
@@ -20,6 +20,7 @@ import LazyFontLink from "./LazyFontCss";
 import QuickSpecimenDrawer from "./QuickSpecimenDrawer";
 
 const PRESET_TEXTS = [
+  { label: "Names", text: "" },
   { label: "Headline", text: "The quick brown fox jumps over the lazy dog" },
   { label: "Alphabet", text: "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz" },
   { label: "Numbers", text: "0123456789 &?!@#$%*" },
@@ -33,7 +34,7 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
   const [italicsOnly, setItalicsOnly] = useState(false);
   const [licenseFilter, setLicenseFilter] = useState<string>("All");
   const [previewText, setPreviewText] = useState("");
-  const [fontSize, setFontSize] = useState(32);
+  const [fontSize, setFontSize] = useState(88);
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
   const [sort, setSort] = useState<SortKey>("popular");
   const [inspectingFont, setInspectingFont] = useState<CatalogFont | null>(null);
@@ -71,13 +72,16 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
   const shownSlugs = useMemo(() => filtered.map((f) => f.slug), [filtered]);
   const allShownSelected =
     shownSlugs.length > 0 && shownSlugs.every((s) => slugs.includes(s));
-  const someShownSelected =
-    shownSlugs.length > 0 &&
-    shownSlugs.some((s) => slugs.includes(s)) &&
-    !allShownSelected;
 
   // Preset Selection Handlers
   const selectAllCatalog = () => selectAll(fonts.map((f) => f.slug));
+  const countOf = (predicate: (f: CatalogFont) => boolean) =>
+    fonts.filter(predicate).length;
+  const sansCount = countOf((f) => f.category.toLowerCase().includes("sans"));
+  const serifCount = countOf((f) => f.category.toLowerCase().includes("serif"));
+  const displayCount = countOf((f) => f.category.toLowerCase().includes("display"));
+  const variableCount = countOf((f) => isVariable(f));
+  const trendingCount = countOf((f) => f.is_top || f.is_hot || f.views_recent > 500);
   const selectAllSans = () => {
     const matching = fonts.filter((f) => f.category.toLowerCase().includes("sans")).map((f) => f.slug);
     selectSlugs(matching);
@@ -109,104 +113,75 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
     setSort("popular");
   };
 
+  const quickSelectChips = [
+    { label: "All 100", onClick: selectAllCatalog },
+    { label: `Sans (${sansCount})`, onClick: selectAllSans },
+    { label: `Serif (${serifCount})`, onClick: selectAllSerif },
+    { label: `Display (${displayCount})`, onClick: selectAllDisplay },
+    { label: `Variable (${variableCount})`, onClick: selectAllVariable },
+    { label: `Trending (${trendingCount})`, onClick: selectAllTop },
+  ];
+
   return (
-    <div className="space-y-8">
-      {/* 1. HERO COMMAND DECK (Fontshare Parchment & Charcoal) */}
-      <section className="border border-[var(--color-border)] bg-[var(--color-panel)] p-6 md:p-8 mt-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="max-w-2xl">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="badge-solid">100% FREE FOR COMMERCIAL USE</span>
-              <span className="text-xs font-mono text-[var(--color-muted)]">ITF &amp; SIL OFL</span>
-            </div>
-            <h1 className="font-display font-black text-3xl md:text-5xl lg:text-6xl tracking-tight text-[var(--color-text)] leading-tight">
-              Bulk Download Fontshare
+    <div className="space-y-0">
+      {/* 1. INTRO BAND - quiet Fontshare-style statement, bulk actions right */}
+      <section className="pt-10 md:pt-14 pb-9 border-b border-[var(--color-border)]">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+          <div className="max-w-3xl min-w-0">
+            <h1 className="font-display font-black text-4xl md:text-6xl lg:text-7xl tracking-tighter leading-[0.95] text-[var(--color-text)]">
+              Quality fonts. Free. In bulk.
             </h1>
-            <p className="text-sm text-[var(--color-muted)] mt-2 leading-relaxed">
-              Download all 100 curated font families from the Indian Type Foundry catalog.
-              Select specific styles, filter by type or variable axes, or download the full library in one click.
+            <p className="mt-4 text-sm md:text-base text-[var(--color-muted)] leading-relaxed max-w-xl">
+              Every family from the Indian Type Foundry catalog, free for
+              commercial use. Select what you need and download the ZIPs in one click.
             </p>
           </div>
 
           {/* Direct 1-Click Catalog Download */}
-          <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
+          <div className="flex flex-col gap-2.5 lg:items-end shrink-0">
             <button
               type="button"
               onClick={() => downloadAll(fonts.map((f) => f.slug))}
               disabled={isDownloading}
-              className="btn-solid px-7 py-4 text-xs uppercase tracking-wider font-extrabold flex items-center justify-center gap-3 shadow-md cursor-pointer"
+              className="btn-solid px-7 py-4 text-xs font-extrabold flex items-center justify-center gap-3 cursor-pointer"
             >
               <svg
                 width="16"
                 height="16"
-                style={{ width: 16, height: 16, minWidth: 16, minHeight: 16, display: "inline-block" }}
                 className="w-4 h-4 shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              <span>Download Full Catalog (100 Fonts)</span>
+              <span>Download full catalog</span>
             </button>
-            <div className="flex items-center justify-center gap-2 text-[11px] text-[var(--color-muted)] font-mono">
-              <span>~1.2 GB Total</span>
-              <span>{"\u00B7"}</span>
-              <span>Direct ZIP Downloads</span>
-            </div>
+            <p className="text-[11px] text-[var(--color-muted)] font-mono">
+              100 ZIPs, ~1.2 GB {"\u00B7"} ITF FFL / SIL OFL
+            </p>
           </div>
         </div>
 
-        {/* Quick Batch Presets Bar */}
-        <div className="mt-6 pt-5 border-t border-[var(--color-border)] flex flex-wrap items-center gap-2">
-          <span className="micro-label text-[var(--color-muted)] mr-2">Quick Select:</span>
-          <button
-            type="button"
-            onClick={selectAllCatalog}
-            className="text-xs font-mono px-3 py-1 bg-[var(--color-card)] border border-[var(--color-border)] hover:border-[var(--color-text)] text-[var(--color-text)] transition-colors cursor-pointer"
-          >
-            + All 100
-          </button>
-          <button
-            type="button"
-            onClick={selectAllSans}
-            className="text-xs font-mono px-3 py-1 bg-[var(--color-card)] border border-[var(--color-border)] hover:border-[var(--color-text)] text-[var(--color-text)] transition-colors cursor-pointer"
-          >
-            + Sans ({fonts.filter((f) => f.category.toLowerCase().includes("sans")).length})
-          </button>
-          <button
-            type="button"
-            onClick={selectAllSerif}
-            className="text-xs font-mono px-3 py-1 bg-[var(--color-card)] border border-[var(--color-border)] hover:border-[var(--color-text)] text-[var(--color-text)] transition-colors cursor-pointer"
-          >
-            + Serif ({fonts.filter((f) => f.category.toLowerCase().includes("serif")).length})
-          </button>
-          <button
-            type="button"
-            onClick={selectAllDisplay}
-            className="text-xs font-mono px-3 py-1 bg-[var(--color-card)] border border-[var(--color-border)] hover:border-[var(--color-text)] text-[var(--color-text)] transition-colors cursor-pointer"
-          >
-            + Display ({fonts.filter((f) => f.category.toLowerCase().includes("display")).length})
-          </button>
-          <button
-            type="button"
-            onClick={selectAllVariable}
-            className="text-xs font-mono px-3 py-1 bg-[var(--color-card)] border border-[var(--color-border)] hover:border-[var(--color-text)] text-[var(--color-text)] transition-colors cursor-pointer"
-          >
-            + Variable ({fonts.filter((f) => isVariable(f)).length})
-          </button>
-          <button
-            type="button"
-            onClick={selectAllTop}
-            className="text-xs font-mono px-3 py-1 bg-[var(--color-card)] border border-[var(--color-border)] hover:border-[var(--color-text)] text-[var(--color-text)] transition-colors cursor-pointer"
-          >
-            + Top / Trending
-          </button>
+        {/* Quick batch presets bar */}
+        <div className="mt-9 flex flex-wrap items-center gap-2">
+          <span className="micro-label text-[var(--color-muted)] mr-2">Quick select</span>
+          {quickSelectChips.map((chip) => (
+            <button
+              key={chip.label}
+              type="button"
+              onClick={chip.onClick}
+              className="text-xs font-mono px-3 py-1.5 bg-[var(--color-card)] border border-[var(--color-border)] hover:border-[var(--color-text)] text-[var(--color-text)] transition-colors cursor-pointer"
+            >
+              + {chip.label}
+            </button>
+          ))}
           {slugs.length > 0 && (
             <button
               type="button"
               onClick={clear}
-              className="text-xs font-mono px-3 py-1 text-[var(--color-muted)] hover:text-red-600 underline underline-offset-4 ml-auto cursor-pointer"
+              className="text-xs font-mono px-3 py-1.5 text-[var(--color-muted)] hover:text-[var(--color-text)] underline underline-offset-4 ml-auto cursor-pointer transition-colors"
             >
               Clear selection ({slugs.length})
             </button>
@@ -214,18 +189,21 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
         </div>
       </section>
 
-      {/* 2. MINIMALIST FONTSHARE SEARCH & CONTROLS */}
-      <div className="space-y-4 pt-2">
-        {/* Row 1: Search & Category Pills */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pb-3 border-b border-[var(--color-border)]">
-          {/* Search Box with Search Icon */}
-          <div className="flex-1 flex items-center gap-2 text-sm text-[var(--color-text)]">
-            <span className="text-[var(--color-dim)] text-base font-serif">&#9906;</span>
+      {/* 2. CONTROL BAND - two hairline rows, Fontshare style */}
+      <div className="border-b border-[var(--color-border)]">
+        {/* Row 1: search, categories, specimen size */}
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-0 py-4 border-b border-[var(--color-border-subtle)]">
+          {/* Search */}
+          <div className="flex flex-1 items-center gap-3 min-w-0 lg:pr-6">
+            <svg width="16" height="16" className="w-4 h-4 shrink-0 text-[var(--color-dim)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" strokeWidth={2} />
+              <path strokeLinecap="round" strokeWidth={2} d="M20 20l-3.5-3.5" />
+            </svg>
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search fonts by name, designer, tag (e.g. Satoshi, modern, geometric)..."
+              placeholder="Search by family, designer or tag..."
               aria-label="Search fonts"
               className="bg-transparent w-full outline-none text-sm text-[var(--color-text)] placeholder-[var(--color-dim)] font-sans"
             />
@@ -234,19 +212,19 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
                 type="button"
                 onClick={() => setQuery("")}
                 aria-label="Clear search"
-                className="text-xs text-[var(--color-muted)] hover:text-[var(--color-text)] cursor-pointer"
+                className="text-xs text-[var(--color-muted)] hover:text-[var(--color-text)] cursor-pointer transition-colors"
               >
                 {"\u2715"}
               </button>
             )}
           </div>
 
-          {/* Categories Horizontal Selector */}
-          <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto">
+          {/* Categories */}
+          <div className="flex flex-wrap items-center gap-1.5 lg:pl-6 lg:border-l lg:border-[var(--color-border)]">
             <button
               type="button"
               onClick={() => setCategory("All")}
-              className={`text-xs px-3 py-1.5 transition-all cursor-pointer ${
+              className={`text-xs px-3 py-1.5 transition-colors cursor-pointer ${
                 category === "All"
                   ? "bg-[var(--color-text)] text-[var(--color-bg)] font-bold"
                   : "border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-text)] hover:border-[var(--color-text)]"
@@ -259,7 +237,7 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
                 key={c}
                 type="button"
                 onClick={() => setCategory(c)}
-                className={`text-xs px-3 py-1.5 transition-all cursor-pointer ${
+                className={`text-xs px-3 py-1.5 transition-colors cursor-pointer ${
                   category === c
                     ? "bg-[var(--color-text)] text-[var(--color-bg)] font-bold"
                     : "border border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-text)] hover:border-[var(--color-text)]"
@@ -269,45 +247,61 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
               </button>
             ))}
           </div>
+
+          {/* Specimen size */}
+          <div className="hidden md:flex items-center gap-3 lg:pl-6 lg:border-l lg:border-[var(--color-border)] shrink-0">
+            <span className="text-xs font-mono text-[var(--color-text)] w-12 text-right">
+              {fontSize}px
+            </span>
+            <input
+              type="range"
+              min={32}
+              max={140}
+              step={4}
+              value={fontSize}
+              onChange={(e) => setFontSize(Number(e.target.value))}
+              aria-label="Font preview size"
+              className="fs-range w-24 lg:w-28"
+            />
+          </div>
         </div>
 
-        {/* Row 2: Live Specimen Input & Properties */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pb-3 border-b border-[var(--color-border)] text-xs">
-          {/* Custom Specimen Input with Pencil Icon */}
-          <div className="flex-1 flex items-center gap-2">
-            <span className="text-[var(--color-dim)] text-sm">&#9998;</span>
+        {/* Row 2: your text, properties, sort */}
+        <div className="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-0 py-4">
+          {/* Custom specimen input */}
+          <div className="flex flex-1 items-center gap-3 min-w-0 xl:pr-6">
+            <svg width="16" height="16" className="w-4 h-4 shrink-0 text-[var(--color-dim)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.5 4.5l4 4L8 20l-5 1 1-5L15.5 4.5z" />
+            </svg>
             <input
               type="text"
               value={previewText}
               onChange={(e) => setPreviewText(e.target.value)}
-              placeholder="Your Text (type custom preview string)..."
+              placeholder="Your text across every specimen..."
               aria-label="Custom specimen text"
-              className="bg-transparent w-full outline-none text-xs text-[var(--color-text)] placeholder-[var(--color-dim)]"
+              className="bg-transparent flex-1 min-w-0 outline-none text-sm text-[var(--color-text)] placeholder-[var(--color-dim)] font-sans"
             />
-            {PRESET_TEXTS.map((p) => (
-              <button
-                key={p.label}
-                type="button"
-                onClick={() => setPreviewText(p.text)}
-                className="hidden lg:inline-block text-[11px] text-[var(--color-muted)] hover:text-[var(--color-text)] border border-[var(--color-border)] px-2 py-0.5 cursor-pointer whitespace-nowrap"
-              >
-                {p.label}
-              </button>
-            ))}
-            {previewText && (
-              <button
-                type="button"
-                onClick={() => setPreviewText("")}
-                className="text-[11px] text-[var(--color-muted)] hover:underline cursor-pointer"
-              >
-                Reset
-              </button>
-            )}
+            <div className="flex items-center gap-1.5 shrink-0">
+              {PRESET_TEXTS.map((p) => (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => setPreviewText(p.text)}
+                  className={`hidden lg:inline-block text-[11px] px-2 py-1 cursor-pointer whitespace-nowrap transition-colors border ${
+                    (previewText === p.text && p.text) || (p.label === "Names" && !previewText)
+                      ? "border-[var(--color-text)] text-[var(--color-text)]"
+                      : "border-[var(--color-border)] text-[var(--color-muted)] hover:text-[var(--color-text)]"
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Properties Filter & Sizing */}
-          <div className="flex flex-wrap items-center gap-3">
-            <label className="flex items-center gap-1.5 cursor-pointer text-[var(--color-muted)] hover:text-[var(--color-text)] select-none">
+          {/* Properties + sort */}
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs xl:pl-6 xl:border-l xl:border-[var(--color-border)]">
+            <label className="flex items-center gap-1.5 cursor-pointer text-[var(--color-muted)] hover:text-[var(--color-text)] select-none transition-colors">
               <input
                 type="checkbox"
                 checked={variableOnly}
@@ -317,7 +311,7 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
               <span>Variable</span>
             </label>
 
-            <label className="flex items-center gap-1.5 cursor-pointer text-[var(--color-muted)] hover:text-[var(--color-text)] select-none">
+            <label className="flex items-center gap-1.5 cursor-pointer text-[var(--color-muted)] hover:text-[var(--color-text)] select-none transition-colors">
               <input
                 type="checkbox"
                 checked={italicsOnly}
@@ -331,32 +325,20 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
               value={licenseFilter}
               onChange={(e) => setLicenseFilter(e.target.value)}
               aria-label="Filter by license"
-              className="bg-[var(--color-panel)] border border-[var(--color-border)] px-2 py-1 text-xs text-[var(--color-text)] outline-none cursor-pointer"
+              className="bg-transparent border border-[var(--color-border)] px-2 py-1 text-xs text-[var(--color-text)] outline-none cursor-pointer"
             >
-              <option value="All">All Licenses</option>
+              <option value="All">All licenses</option>
               <option value="sil_ofl">SIL OFL</option>
-              <option value="itf_ffl">ITF Free License</option>
+              <option value="itf_ffl">ITF FFL</option>
             </select>
 
-            <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-[var(--color-border)]">
-              <span className="text-[11px] font-mono text-[var(--color-muted)]">{fontSize}px</span>
-              <input
-                type="range"
-                min={18}
-                max={64}
-                value={fontSize}
-                onChange={(e) => setFontSize(Number(e.target.value))}
-                aria-label="Font preview size"
-                className="fs-range w-20"
-              />
-            </div>
-
-            <div className="flex items-center gap-1.5 pl-2 border-l border-[var(--color-border)]">
+            <div className="flex items-center gap-2 text-[var(--color-muted)]">
+              <span>Sort</span>
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortKey)}
                 aria-label="Sort fonts"
-                className="bg-[var(--color-panel)] border border-[var(--color-border)] px-2 py-1 text-xs text-[var(--color-text)] outline-none cursor-pointer"
+                className="bg-transparent border border-[var(--color-border)] px-2 py-1 text-xs text-[var(--color-text)] outline-none cursor-pointer"
               >
                 {SORTS.map((s) => (
                   <option key={s.key} value={s.key}>
@@ -369,27 +351,27 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
         </div>
       </div>
 
-      {/* 3. FONTSHARE BIG NUMBER & VIEW TOGGLE BAR */}
-      <div className="flex flex-wrap items-baseline justify-between gap-4 pt-2">
-        <div className="flex items-baseline gap-4">
+      {/* 3. COUNT ROW - big number, view toggle, bulk helpers */}
+      <div className="flex flex-wrap items-baseline justify-between gap-4 py-6">
+        <div className="flex items-baseline gap-3">
           <span className="font-display font-black text-4xl sm:text-5xl tracking-tighter text-[var(--color-text)]">
             {filtered.length}
           </span>
           <span className="text-xs font-mono text-[var(--color-muted)]">
-            families available
+            {filtered.length === 1 ? "family" : "families"}
           </span>
           {filtered.length < fonts.length && (
             <button
               type="button"
               onClick={resetFilters}
-              className="text-xs font-mono text-[var(--color-text)] underline cursor-pointer"
+              className="text-xs font-mono text-[var(--color-text)] underline underline-offset-4 cursor-pointer"
             >
               (Reset filters)
             </button>
           )}
         </div>
 
-        {/* View Mode & Bulk Selection Helpers */}
+        {/* View mode & bulk selection helpers */}
         <div className="flex items-center gap-4 text-xs">
           <button
             type="button"
@@ -402,17 +384,18 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
                 selectSlugs(shownSlugs);
               }
             }}
-            className="text-[var(--color-muted)] hover:text-[var(--color-text)] underline underline-offset-4 cursor-pointer font-mono"
+            className="text-[var(--color-muted)] hover:text-[var(--color-text)] underline underline-offset-4 cursor-pointer font-mono transition-colors"
           >
             {allShownSelected
               ? `Unselect ${shownSlugs.length} shown`
               : `Select all ${shownSlugs.length} shown`}
           </button>
 
-          <div className="flex items-center gap-3 border-l border-[var(--color-border)] pl-4 font-mono">
+          <div className="flex items-center gap-3 border-l border-[var(--color-border)] pl-4">
             <button
               type="button"
               onClick={() => setViewMode("table")}
+              aria-pressed={viewMode === "table"}
               className={`cursor-pointer transition-colors ${
                 viewMode === "table"
                   ? "font-bold text-[var(--color-text)] underline underline-offset-4"
@@ -425,6 +408,7 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
             <button
               type="button"
               onClick={() => setViewMode("grid")}
+              aria-pressed={viewMode === "grid"}
               className={`cursor-pointer transition-colors ${
                 viewMode === "grid"
                   ? "font-bold text-[var(--color-text)] underline underline-offset-4"
@@ -437,7 +421,7 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
         </div>
       </div>
 
-      {/* 4. MAIN LIST / GRID CONTENT */}
+      {/* 4. FONT LIST - Fontshare specimen cards */}
       {filtered.length === 0 ? (
         <div className="border border-[var(--color-border)] p-12 text-center bg-[var(--color-panel)]">
           <p className="text-base text-[var(--color-muted)] mb-3">
@@ -446,179 +430,40 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
           <button
             type="button"
             onClick={resetFilters}
-            className="btn-outline px-4 py-2 text-xs uppercase tracking-wider font-bold cursor-pointer"
+            className="btn-outline px-4 py-2 text-xs font-bold cursor-pointer"
           >
-            Reset All Filters
+            Reset all filters
           </button>
         </div>
       ) : viewMode === "table" ? (
-        /* ======================== TABLE VIEW ======================== */
-        <div className="border border-[var(--color-border)] bg-[var(--color-card)] overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="border-b border-[var(--color-border)] bg-[var(--color-panel)] text-[var(--color-muted)] uppercase tracking-wider text-[10px]">
-                  <th className="py-3 px-4 w-10 text-center">
-                    <input
-                      type="checkbox"
-                      checked={allShownSelected}
-                      ref={(el) => {
-                        if (el) el.indeterminate = someShownSelected;
-                      }}
-                      onChange={() => {
-                        if (allShownSelected) {
-                          const shownSet = new Set(shownSlugs);
-                          selectAll(slugs.filter((s) => !shownSet.has(s)));
-                        } else {
-                          selectSlugs(shownSlugs);
-                        }
-                      }}
-                      className="w-4 h-4 accent-[var(--color-text)] cursor-pointer"
-                      aria-label="Select all filtered fonts"
-                    />
-                  </th>
-                  <th className="py-3 px-4 min-w-44">Family</th>
-                  <th className="py-3 px-4 min-w-64">Sample Specimen</th>
-                  <th className="py-3 px-4 min-w-28">Category</th>
-                  <th className="py-3 px-4 min-w-24">Styles</th>
-                  <th className="py-3 px-4 min-w-24">License</th>
-                  <th className="py-3 px-4 text-right min-w-40">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--color-border)]">
-                {filtered.map((font) => {
-                  const isSelected = has(font.slug);
-                  const weights = weightsOf(font);
-                  const midWeight = weights[Math.floor(weights.length / 2)] ?? 400;
-                  const displaySample = previewText.trim() || font.name;
-
-                  return (
-                    <tr
-                      key={font.slug}
-                      onClick={() => toggle(font.slug)}
-                      className={`transition-colors cursor-pointer ${
-                        isSelected
-                          ? "bg-[var(--color-panel)] font-medium shadow-[inset_3px_0_0_var(--color-text)]"
-                          : "hover:bg-[var(--color-card-hover)]"
-                      }`}
-                    >
-                      {/* Checkbox */}
-                      <td className="py-3 px-4 text-center" onClick={(e) => e.stopPropagation()}>
-                        <LazyFontLink href={cssUrl(font)} />
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => toggle(font.slug)}
-                          className="w-4 h-4 accent-[var(--color-text)] cursor-pointer"
-                          aria-label={`Toggle ${font.name}`}
-                        />
-                      </td>
-
-                      {/* Family Name & Designer */}
-                      <td className="py-3 px-4">
-                        <div className="flex flex-col">
-                          <span className="font-display font-bold text-base text-[var(--color-text)]">
-                            {font.name}
-                          </span>
-                          <span className="text-[11px] text-[var(--color-muted)] truncate max-w-40">
-                            {font.designers.join(", ") || "Unknown"}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Live Font Specimen (Big & Crisp) */}
-                      <td className="py-3 px-4">
-                        <p
-                          className="truncate max-w-md text-[var(--color-text)] opacity-95 leading-normal"
-                          style={{
-                            fontFamily: `'${font.name}', sans-serif`,
-                            fontSize: `${fontSize}px`,
-                            fontWeight: midWeight,
-                          }}
-                        >
-                          {displaySample}
-                        </p>
-                      </td>
-
-                      {/* Category */}
-                      <td className="py-3 px-4">
-                        <span className="text-[11px] text-[var(--color-muted)]">
-                          {font.category}
-                        </span>
-                      </td>
-
-                      {/* Styles & Features */}
-                      <td className="py-3 px-4">
-                        <div className="flex flex-wrap items-center gap-1.5">
-                          <span className="badge-tag font-mono text-[10px]">
-                            {font.styles.length} styles
-                          </span>
-                          {isVariable(font) && (
-                            <span className="badge-solid text-[9px]">
-                              VAR
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* License */}
-                      <td className="py-3 px-4">
-                        <span className="text-[11px] font-mono text-[var(--color-muted)]">
-                          {licenseLabel(font.license)}
-                        </span>
-                      </td>
-
-                      {/* Actions */}
-                      <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setInspectingFont(font)}
-                            className="btn-outline px-2.5 py-1 text-[11px] cursor-pointer"
-                            title="Inspect styles and character specimen"
-                          >
-                            Inspect
-                          </button>
-                          <a
-                            href={downloadUrl(font.slug)}
-                            download={`${font.slug}.zip`}
-                            className="btn-solid px-3 py-1 text-[11px] uppercase tracking-wider font-bold flex items-center gap-1 cursor-pointer"
-                            title={`Download ${font.name} ZIP`}
-                          >
-                            <span>.ZIP</span>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      ) : (
-        /* ======================== GRID VIEW ======================== */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        /* ======================== LIST VIEW (specimen cards) ======================== */
+        <div className="border border-[var(--color-border)] bg-[var(--color-card)]">
           {filtered.map((font) => {
             const isSelected = has(font.slug);
-            const weights = weightsOf(font);
-            const midWeight = weights[Math.floor(weights.length / 2)] ?? 400;
+            const displayWeight = displayWeightOf(font);
             const displaySample = previewText.trim() || font.name;
 
             return (
               <article
                 key={font.slug}
                 onClick={() => toggle(font.slug)}
-                className={`border border-[var(--color-border)] bg-[var(--color-card)] p-6 flex flex-col justify-between cursor-pointer transition-all hover:border-[var(--color-text)] ${
+                className={`relative border-b border-[var(--color-border)] last:border-b-0 px-5 md:px-8 py-5 md:py-6 cursor-pointer transition-colors ${
                   isSelected
-                    ? "shadow-[inset_0_0_0_1.5px_var(--color-text)] bg-[var(--color-panel)]"
-                    : ""
+                    ? "bg-[var(--color-panel)]"
+                    : "hover:bg-[var(--color-card-hover)]"
                 }`}
               >
                 <LazyFontLink href={cssUrl(font)} />
-                {/* Card Header */}
-                <div className="flex items-start justify-between gap-3 pb-3 border-b border-[var(--color-border)]">
-                  <div className="flex items-center gap-2.5">
+                {isSelected && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-0 inset-y-0 w-[3px] bg-[var(--color-text)]"
+                  />
+                )}
+
+                {/* Meta row */}
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-center gap-3 min-w-0">
                     <input
                       type="checkbox"
                       checked={isSelected}
@@ -627,8 +472,99 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
                       className="w-4 h-4 accent-[var(--color-text)] cursor-pointer"
                       aria-label={`Toggle ${font.name}`}
                     />
-                    <div>
-                      <h2 className="font-display font-bold text-lg text-[var(--color-text)] leading-tight">
+                    <h2 className="font-display font-bold text-base md:text-lg tracking-tight truncate text-[var(--color-text)]">
+                      {font.name}
+                    </h2>
+                  </div>
+
+                  <div className="flex items-center gap-3.5 text-[11px] font-mono text-[var(--color-muted)] shrink-0">
+                    <span className="hidden sm:inline">{font.category}</span>
+                    <span>{font.styles.length} styles</span>
+                    {isVariable(font) && (
+                      <span className="badge-solid text-[9px]">VAR</span>
+                    )}
+                    <span className="hidden md:inline">{licenseLabel(font.license)}</span>
+                  </div>
+                </div>
+
+                {/* Giant specimen */}
+                <div className="py-7 md:py-9 min-w-0">
+                  <p
+                    className="truncate leading-none tracking-tight text-[var(--color-text)]"
+                    style={{
+                      fontFamily: `'${font.name}', sans-serif`,
+                      fontSize: `${fontSize}px`,
+                      fontWeight: displayWeight,
+                    }}
+                  >
+                    {displaySample}
+                  </p>
+                </div>
+
+                {/* Card footer */}
+                <div
+                  className="flex flex-wrap items-center justify-between gap-3"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <span className="text-xs text-[var(--color-muted)] truncate max-w-64">
+                    Designed by {font.designers.join(", ") || "Unknown"}
+                  </span>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setInspectingFont(font)}
+                      className="btn-outline px-3 py-1.5 text-[11px] cursor-pointer"
+                      title="Inspect styles and character specimen"
+                    >
+                      Inspect
+                    </button>
+                    <a
+                      href={downloadUrl(font.slug)}
+                      download={`${font.slug}.zip`}
+                      className="btn-solid px-3 py-1.5 text-[11px] font-bold cursor-pointer"
+                      title={`Download ${font.name} ZIP`}
+                    >
+                      .ZIP
+                    </a>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      ) : (
+        /* ======================== GRID VIEW ======================== */
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filtered.map((font) => {
+            const isSelected = has(font.slug);
+            const displayWeight = displayWeightOf(font);
+            const displaySample = previewText.trim() || font.name;
+
+            return (
+              <article
+                key={font.slug}
+                onClick={() => toggle(font.slug)}
+                className={`border border-[var(--color-border)] bg-[var(--color-card)] px-6 pt-5 pb-4 flex flex-col cursor-pointer transition-[background-color,border-color,transform] hover:border-[var(--color-text)] hover:-translate-y-0.5 ${
+                  isSelected
+                    ? "shadow-[inset_0_0_0_1.5px_var(--color-text)] bg-[var(--color-panel)]"
+                    : ""
+                }`}
+              >
+                <LazyFontLink href={cssUrl(font)} />
+                {/* Card header */}
+                <div className="flex items-start justify-between gap-3 pb-3 border-b border-[var(--color-border)]">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggle(font.slug)}
+                      onClick={(e) => e.stopPropagation()}
+                      className="w-4 h-4 accent-[var(--color-text)] cursor-pointer"
+                      aria-label={`Toggle ${font.name}`}
+                    />
+                    <div className="min-w-0">
+                      <h2 className="font-display font-bold text-lg text-[var(--color-text)] leading-tight truncate">
                         {font.name}
                       </h2>
                       <span className="text-[11px] text-[var(--color-muted)]">
@@ -637,7 +573,7 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     {isVariable(font) && (
                       <span className="badge-solid text-[9px]">VAR</span>
                     )}
@@ -647,21 +583,21 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
                   </div>
                 </div>
 
-                {/* Big Specimen Preview (Fontshare Style) */}
-                <div className="py-8 min-h-32 flex items-center">
+                {/* Big specimen preview */}
+                <div className="py-8 min-h-36 min-w-0 flex items-center">
                   <p
-                    className="truncate w-full text-[var(--color-text)] leading-tight tracking-tight"
+                    className="truncate w-full leading-tight tracking-tight text-[var(--color-text)]"
                     style={{
                       fontFamily: `'${font.name}', sans-serif`,
-                      fontSize: `${Math.max(fontSize, 40)}px`,
-                      fontWeight: midWeight,
+                      fontSize: `${Math.max(fontSize, 48)}px`,
+                      fontWeight: displayWeight,
                     }}
                   >
                     {displaySample}
                   </p>
                 </div>
 
-                {/* Card Footer */}
+                {/* Card footer */}
                 <div
                   className="pt-3 border-t border-[var(--color-border)] flex items-center justify-between gap-2 text-xs"
                   onClick={(e) => e.stopPropagation()}
@@ -681,7 +617,7 @@ export default function CatalogBrowser({ fonts }: { fonts: CatalogFont[] }) {
                     <a
                       href={downloadUrl(font.slug)}
                       download={`${font.slug}.zip`}
-                      className="btn-solid px-3 py-1 text-[11px] uppercase tracking-wider font-bold cursor-pointer"
+                      className="btn-solid px-3 py-1 text-[11px] font-bold cursor-pointer"
                     >
                       .ZIP
                     </a>
