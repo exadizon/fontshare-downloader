@@ -9,6 +9,14 @@ Two parts share one generated catalog (`data/fonts.json`, 100 families):
 - **Web UI** (`web/`) - Next.js catalog browser with live previews,
   per-family downloads, and a multi-select bulk queue. Deployable to Vercel.
 
+## Why this exists
+
+Fontshare publishes excellent free fonts, but only one family at a time and
+with no bulk option. This tool is a personal convenience for people who use
+Fontshare heavily and want to (re)install the whole catalog on a new machine
+without clicking through 100 download pages. It is not affiliated with
+Fontshare or Indian Type Foundry.
+
 ## Features
 
 - Live discovery from `https://api.fontshare.com/v2/fonts` with pagination,
@@ -71,16 +79,20 @@ npm run dev      # local preview at http://localhost:3000
 Previews stream from Fontshare's CDN, downloads link straight to Fontshare's
 API - no server storage needed.
 
-### Refresh the catalog
+### Catalog freshness
 
-Fontshare adds families over time:
+Two different data sources are involved, and only one needs manual syncing:
 
-```bash
-python scripts/sync_catalog.py
-```
+- **CLI** (`cli/download.py`, `cli/import_zips.py`) discovers the catalog
+  live from `https://api.fontshare.com/v2/fonts` on every run, so it always
+  sees whatever Fontshare publishes today. No sync step is needed for
+  downloading or installing.
+- **Web UI** reads the committed `data/fonts.min.json` at build time, so new
+  families only appear after `python scripts/sync_catalog.py` plus a rebuild
+  and redeploy.
 
-This regenerates `data/fonts.json` (full metadata) and `data/fonts.min.json`
-(slim UI bundle) from the live API. Commit the regenerated files.
+If Fontshare changes its API or download URL shape, the CLI will fail loudly
+rather than silently; check `downloads/logs/download.log` and open an issue.
 
 ## Commands
 
@@ -108,12 +120,23 @@ downloads/
 See `docs/ARCHITECTURE.md` for discovery, download, extraction, and install
 details. Retired pre-clean-break scripts live in `scripts/archive/`.
 
-## Licensing
+## Legal and licensing
 
-The tool is released under the MIT License (see `LICENSE`). The fonts
-themselves remain subject to Fontshare's per-family licenses (`itf_ffl` or
-`sil_ofl`, recorded in `data/fonts.json`). Review
-[Fontshare licenses](https://www.fontshare.com/licenses) before use.
+This project is a convenience tool. It is not affiliated with, endorsed by,
+or sponsored by Fontshare or Indian Type Foundry.
+
+- **The tool** is released under the MIT License (see `LICENSE`).
+- **The fonts** are not part of this repository and are not redistributed by
+  it. They are downloaded directly from Fontshare's own API, the same endpoint
+  their website uses. Each family carries its own license (`itf_ffl` or
+  `sil_ofl`), recorded in `data/fonts.json`. Review
+  [Fontshare's licenses](https://www.fontshare.com/licenses) and comply with
+  the terms of any family you use, especially for commercial work.
+- **No font files are committed.** `downloads/` is gitignored, and the
+  catalog data contains metadata only.
+- **Be respectful** of Fontshare's service: the defaults (1.0s rate limit,
+  3 concurrent) are deliberately conservative. Do not raise them to hammer
+  the API.
 
 ## Contributing
 
